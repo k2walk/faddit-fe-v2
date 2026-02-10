@@ -6,11 +6,11 @@ function AccordionTableItem(props) {
   return (
     <tbody className='text-sm'>
       <tr>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+        <td className='px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
           <div className='flex items-center text-gray-800'>
-            <div className='w-10 h-10 shrink-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full mr-2 sm:mr-3'>
+            <div className='mr-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-100 sm:mr-3 dark:bg-gray-700'>
               <img
-                className='rounded-full ml-1'
+                className='ml-1 rounded-full'
                 src={props.image}
                 width='40'
                 height='40'
@@ -20,24 +20,24 @@ function AccordionTableItem(props) {
             <div className='font-medium text-gray-800 dark:text-gray-100'>{props.customer}</div>
           </div>
         </td>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+        <td className='px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
           <div className='text-left font-medium text-green-600'>{props.total}</div>
         </td>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
-          <div className='inline-flex font-medium bg-yellow-500/20 text-yellow-700 rounded-full text-center px-2.5 py-0.5'>
+        <td className='px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
+          <div className='inline-flex rounded-full bg-yellow-500/20 px-2.5 py-0.5 text-center font-medium text-yellow-700'>
             {props.status}
           </div>
         </td>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+        <td className='px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
           <div className='text-center'>{props.items}</div>
         </td>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+        <td className='px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
           <div className='text-left'>{props.location}</div>
         </td>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+        <td className='px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
           <div className='flex items-center'>
             <svg
-              className='fill-current text-gray-400 dark:text-gray-500 shrink-0 mr-2'
+              className='mr-2 shrink-0 fill-current text-gray-400 dark:text-gray-500'
               width='16'
               height='16'
               viewBox='0 0 16 16'
@@ -47,7 +47,7 @@ function AccordionTableItem(props) {
             <div>{props.type}</div>
           </div>
         </td>
-        <td className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px'>
+        <td className='w-px px-2 py-3 whitespace-nowrap first:pl-5 last:pr-5'>
           <div className='flex items-center'>
             <button
               className={`text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 ${open && 'rotate-180'}`}
@@ -56,7 +56,7 @@ function AccordionTableItem(props) {
               aria-controls={`description-${props.id}`}
             >
               <span className='sr-only'>Menu</span>
-              <svg className='w-8 h-8 fill-current' viewBox='0 0 32 32'>
+              <svg className='h-8 w-8 fill-current' viewBox='0 0 32 32'>
                 <path d='M16 20l-5.4-5.4 1.4-1.4 4 4 4-4 1.4 1.4z' />
               </svg>
             </button>
@@ -69,10 +69,10 @@ function AccordionTableItem(props) {
       and it should match the number of columns in your table
       */}
       <tr id={`description-${props.id}`} role='region' className={`${!open && 'hidden'}`}>
-        <td colSpan='10' className='px-2 first:pl-5 last:pr-5 py-3'>
-          <div className='flex items-center bg-gray-50 dark:bg-gray-950/[0.15] dark:text-gray-400 p-3 -mt-3'>
+        <td colSpan='10' className='px-2 py-3 first:pl-5 last:pr-5'>
+          <div className='-mt-3 flex items-center bg-gray-50 p-3 dark:bg-gray-950/[0.15] dark:text-gray-400'>
             <svg
-              className='shrink-0 fill-current text-gray-400 dark:text-gray-500 mr-2'
+              className='mr-2 shrink-0 fill-current text-gray-400 dark:text-gray-500'
               width='16'
               height='16'
             >
