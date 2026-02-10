@@ -69,6 +69,11 @@ import TooltipPage from './pages/component/TooltipPage';
 import AccordionPage from './pages/component/AccordionPage';
 import IconsPage from './pages/component/IconsPage';
 
+// Faddit Pages
+import Login from './pages/faddit/auth/Login';
+import FadditSignup from './pages/faddit/auth/Signup';
+import AuthLayout from './layouts/AuthLayout';
+
 function App() {
   const location = useLocation();
 
@@ -81,7 +86,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path='/' element={<Dashboard />} />
+        <Route path='/' element={<Dashboard />} />
+        {/* ... existing routes ... */}
         <Route path='/dashboard/analytics' element={<Analytics />} />
         <Route path='/dashboard/fintech' element={<Fintech />} />
         <Route path='/ecommerce/customers' element={<Customers />} />
@@ -145,6 +151,14 @@ function App() {
         <Route path='/component/tooltip' element={<TooltipPage />} />
         <Route path='/component/accordion' element={<AccordionPage />} />
         <Route path='/component/icons' element={<IconsPage />} />
+        <Route path='/component/icons' element={<IconsPage />} />
+
+        {/* Faddit Routes */}
+        <Route element={<AuthLayout />}>
+          <Route path='/faddit/sign/in' element={<Login />} />
+          <Route path='/faddit/sign/up' element={<FadditSignup />} />
+        </Route>
+
         <Route path='*' element={<PageNotFound />} />
       </Routes>
     </>

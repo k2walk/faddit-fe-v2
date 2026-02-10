@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import Transition from '../utils/Transition';
 
-function ModalBasic({ children, id, title, modalOpen, setModalOpen }) {
+function ModalFooterBasic({ children, footer, id, title, modalOpen, setModalOpen }) {
   const modalContent = useRef(null);
 
   // close on click outside
@@ -12,7 +12,7 @@ function ModalBasic({ children, id, title, modalOpen, setModalOpen }) {
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
-  }, [modalOpen]);
+  }, [modalOpen, setModalOpen]);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -22,7 +22,8 @@ function ModalBasic({ children, id, title, modalOpen, setModalOpen }) {
     };
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
-  }, [modalOpen]);
+  }, [modalOpen, setModalOpen]);
+
   return (
     <>
       {/* Modal backdrop */}
@@ -75,10 +76,12 @@ function ModalBasic({ children, id, title, modalOpen, setModalOpen }) {
           </div>
           {/* 스크롤 가능한 컨텐츠 영역 */}
           <div className='overflow-y-auto flex-1'>{children}</div>
+          {/* Modal footer - 고정 */}
+          {footer && <div className='flex-shrink-0'>{footer}</div>}
         </div>
       </Transition>
     </>
   );
 }
 
-export default ModalBasic;
+export default ModalFooterBasic;
