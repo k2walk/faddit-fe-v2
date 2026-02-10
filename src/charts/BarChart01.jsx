@@ -3,7 +3,13 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, BarController, BarElement, LinearScale, TimeScale, Tooltip, Legend,
+  Chart,
+  BarController,
+  BarElement,
+  LinearScale,
+  TimeScale,
+  Tooltip,
+  Legend,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
@@ -12,18 +18,14 @@ import { formatValue } from '../utils/Utils';
 
 Chart.register(BarController, BarElement, LinearScale, TimeScale, Tooltip, Legend);
 
-function BarChart01({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function BarChart01({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
+  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } =
+    chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -164,7 +166,7 @@ function BarChart01({
     });
     setChart(newChart);
     return () => newChart.destroy();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -190,10 +192,10 @@ function BarChart01({
 
   return (
     <React.Fragment>
-      <div className="px-5 py-3">
-        <ul ref={legend} className="flex flex-wrap gap-x-4"></ul>
+      <div className='px-5 py-3'>
+        <ul ref={legend} className='flex flex-wrap gap-x-4'></ul>
       </div>
-      <div className="grow">
+      <div className='grow'>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>

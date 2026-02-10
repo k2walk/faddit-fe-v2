@@ -3,26 +3,37 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, LineController, LineElement, Filler, PointElement, LinearScale, CategoryScale, Tooltip,
+  Chart,
+  LineController,
+  LineElement,
+  Filler,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
 // Import utilities
 import { formatValue } from '../utils/Utils';
 
-Chart.register(LineController, LineElement, Filler, PointElement, LinearScale, CategoryScale, Tooltip);
+Chart.register(
+  LineController,
+  LineElement,
+  Filler,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+);
 
-function LineChart07({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function LineChart07({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors; 
+  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } =
+    chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -116,9 +127,7 @@ function LineChart07({
     chart.update('none');
   }, [currentTheme]);
 
-  return (
-    <canvas ref={canvas} width={width} height={height}></canvas>
-  );
+  return <canvas ref={canvas} width={width} height={height}></canvas>;
 }
 
 export default LineChart07;

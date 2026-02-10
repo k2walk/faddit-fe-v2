@@ -47,9 +47,9 @@ export const chartColors = {
     light: getCssVariable('--color-gray-800'),
     dark: getCssVariable('--color-gray-100'),
   },
-  tooltipBodyColor : {
+  tooltipBodyColor: {
     light: getCssVariable('--color-gray-500'),
-    dark: getCssVariable('--color-gray-400')
+    dark: getCssVariable('--color-gray-400'),
   },
   tooltipBgColor: {
     light: getCssVariable('--color-white'),

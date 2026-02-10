@@ -12,10 +12,7 @@ import Image08 from '../../images/user-40-08.jpg';
 import Image09 from '../../images/user-40-09.jpg';
 import Image10 from '../../images/user-40-10.jpg';
 
-function CustomersTable({
-  selectedItems
-}) {
-
+function CustomersTable({ selectedItems }) {
   const customers = [
     {
       id: '0',
@@ -27,7 +24,7 @@ function CustomersTable({
       lastOrder: '#123567',
       spent: '$2,890.66',
       refunds: '-',
-      fav: true
+      fav: true,
     },
     {
       id: '1',
@@ -39,7 +36,7 @@ function CustomersTable({
       lastOrder: '#779912',
       spent: '$14,767.04',
       refunds: '4',
-      fav: false
+      fav: false,
     },
     {
       id: '2',
@@ -51,7 +48,7 @@ function CustomersTable({
       lastOrder: '#889924',
       spent: '$4,996.00',
       refunds: '1',
-      fav: true
+      fav: true,
     },
     {
       id: '3',
@@ -63,7 +60,7 @@ function CustomersTable({
       lastOrder: '#897726',
       spent: '$3,220.66',
       refunds: '2',
-      fav: false
+      fav: false,
     },
     {
       id: '4',
@@ -75,7 +72,7 @@ function CustomersTable({
       lastOrder: '#123567',
       spent: '$2,890.66',
       refunds: '-',
-      fav: true
+      fav: true,
     },
     {
       id: '5',
@@ -87,7 +84,7 @@ function CustomersTable({
       lastOrder: '#896644',
       spent: '$1,649.99',
       refunds: '1',
-      fav: true
+      fav: true,
     },
     {
       id: '6',
@@ -99,7 +96,7 @@ function CustomersTable({
       lastOrder: '#136988',
       spent: '$3,569.87',
       refunds: '2',
-      fav: true
+      fav: true,
     },
     {
       id: '7',
@@ -111,7 +108,7 @@ function CustomersTable({
       lastOrder: '#442206',
       spent: '$19,246.07',
       refunds: '6',
-      fav: false
+      fav: false,
     },
     {
       id: '8',
@@ -123,7 +120,7 @@ function CustomersTable({
       lastOrder: '#764321',
       spent: '$12,276.92',
       refunds: '-',
-      fav: true
+      fav: true,
     },
     {
       id: '9',
@@ -135,8 +132,8 @@ function CustomersTable({
       lastOrder: '#908764',
       spent: '$1,289.97',
       refunds: '2',
-      fav: false
-    }
+      fav: false,
+    },
   ];
 
   const [selectAll, setSelectAll] = useState(false);
@@ -145,107 +142,110 @@ function CustomersTable({
 
   useEffect(() => {
     setList(customers);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    setIsCheck(list.map(li => li.id));
+    setIsCheck(list.map((li) => li.id));
     if (selectAll) {
       setIsCheck([]);
     }
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const { id, checked } = e.target;
     setSelectAll(false);
     setIsCheck([...isCheck, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter(item => item !== id));
+      setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
 
   useEffect(() => {
     selectedItems(isCheck);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCheck]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-xs rounded-xl relative">
-      <header className="px-5 py-4">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">All Customers <span className="text-gray-400 dark:text-gray-500 font-medium">248</span></h2>
+    <div className='bg-white dark:bg-gray-800 shadow-xs rounded-xl relative'>
+      <header className='px-5 py-4'>
+        <h2 className='font-semibold text-gray-800 dark:text-gray-100'>
+          All Customers <span className='text-gray-400 dark:text-gray-500 font-medium'>248</span>
+        </h2>
       </header>
       <div>
-
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-gray-300">
+        <div className='overflow-x-auto'>
+          <table className='table-auto w-full dark:text-gray-300'>
             {/* Table header */}
-            <thead className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
+            <thead className='text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60'>
               <tr>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                  <div className="flex items-center">
-                    <label className="inline-flex">
-                      <span className="sr-only">Select all</span>
-                      <input className="form-checkbox" type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px'>
+                  <div className='flex items-center'>
+                    <label className='inline-flex'>
+                      <span className='sr-only'>Select all</span>
+                      <input
+                        className='form-checkbox'
+                        type='checkbox'
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
                     </label>
                   </div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                  <span className="sr-only">Favourite</span>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px'>
+                  <span className='sr-only'>Favourite</span>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Order</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Order</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Email</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Email</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Location</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Location</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold">Orders</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold'>Orders</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Last order</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Last order</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Total spent</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Total spent</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold">Refunds</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold'>Refunds</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <span className="sr-only">Menu</span>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <span className='sr-only'>Menu</span>
                 </th>
               </tr>
             </thead>
             {/* Table body */}
-            <tbody className="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
-              {
-                list.map(customer => {
-                  return (
-                    <Customer
-                      key={customer.id}
-                      id={customer.id}
-                      image={customer.image}
-                      name={customer.name}
-                      email={customer.email}
-                      location={customer.location}
-                      orders={customer.orders}
-                      lastOrder={customer.lastOrder}
-                      spent={customer.spent}
-                      refunds={customer.refunds}
-                      fav={customer.fav}
-                      handleClick={handleClick}
-                      isChecked={isCheck.includes(customer.id)}
-                    />
-                  )
-                })
-              }
+            <tbody className='text-sm divide-y divide-gray-100 dark:divide-gray-700/60'>
+              {list.map((customer) => {
+                return (
+                  <Customer
+                    key={customer.id}
+                    id={customer.id}
+                    image={customer.image}
+                    name={customer.name}
+                    email={customer.email}
+                    location={customer.location}
+                    orders={customer.orders}
+                    lastOrder={customer.lastOrder}
+                    spent={customer.spent}
+                    refunds={customer.refunds}
+                    fav={customer.fav}
+                    handleClick={handleClick}
+                    isChecked={isCheck.includes(customer.id)}
+                  />
+                );
+              })}
             </tbody>
           </table>
-
         </div>
       </div>
     </div>

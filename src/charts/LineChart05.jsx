@@ -3,7 +3,14 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip,
+  Chart,
+  LineController,
+  LineElement,
+  Filler,
+  PointElement,
+  LinearScale,
+  TimeScale,
+  Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
@@ -12,18 +19,14 @@ import { getCssVariable } from '../utils/Utils';
 
 Chart.register(LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip);
 
-function LineChart05({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function LineChart05({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;    
+  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } =
+    chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -151,40 +154,40 @@ function LineChart05({
     if (!chart) return;
 
     if (darkMode) {
-      chart.options.scales.x.ticks.color = textColor.dark
-      chart.options.scales.y.ticks.color = textColor.dark
-      chart.options.scales.y.grid.color = gridColor.dark
-      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.dark
-      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.dark
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark
+      chart.options.scales.x.ticks.color = textColor.dark;
+      chart.options.scales.y.ticks.color = textColor.dark;
+      chart.options.scales.y.grid.color = gridColor.dark;
+      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.dark;
+      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.dark;
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark;
     } else {
-      chart.options.scales.x.ticks.color = textColor.light
-      chart.options.scales.y.ticks.color = textColor.light
-      chart.options.scales.y.grid.color = gridColor.light
-      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.light
-      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.light
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light
+      chart.options.scales.x.ticks.color = textColor.light;
+      chart.options.scales.y.ticks.color = textColor.light;
+      chart.options.scales.y.grid.color = gridColor.light;
+      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.light;
+      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.light;
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light;
     }
     chart.update('none');
   }, [currentTheme]);
 
   return (
     <React.Fragment>
-      <div className="px-5 py-3">
-        <div className="flex flex-wrap justify-between items-end gap-y-2 gap-x-4">
-          <div className="flex items-center">
-            <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">244.7%</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-medium text-gray-800 dark:text-gray-100">17.4%</span> AVG
+      <div className='px-5 py-3'>
+        <div className='flex flex-wrap justify-between items-end gap-y-2 gap-x-4'>
+          <div className='flex items-center'>
+            <div className='text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2'>244.7%</div>
+            <div className='text-sm text-gray-500 dark:text-gray-400'>
+              <span className='font-medium text-gray-800 dark:text-gray-100'>17.4%</span> AVG
             </div>
           </div>
-          <div className="grow mb-1">
-            <ul ref={legend} className="flex flex-wrap gap-x-4 sm:justify-end" />
+          <div className='grow mb-1'>
+            <ul ref={legend} className='flex flex-wrap gap-x-4 sm:justify-end' />
           </div>
         </div>
       </div>
       {/* Chart built with Chart.js 3 */}
-      <div className="grow">
+      <div className='grow'>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>

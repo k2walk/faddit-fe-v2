@@ -2,9 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
-import {
-  Chart, PolarAreaController, RadialLinearScale, Tooltip, Legend,
-} from 'chart.js';
+import { Chart, PolarAreaController, RadialLinearScale, Tooltip, Legend } from 'chart.js';
 import 'chartjs-adapter-moment';
 
 // Import utilities
@@ -12,18 +10,21 @@ import { getCssVariable } from '../utils/Utils';
 
 Chart.register(PolarAreaController, RadialLinearScale, Tooltip, Legend);
 
-function PolarChart({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function PolarChart({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { gridColor, textColor, backdropColor, tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
+  const {
+    gridColor,
+    textColor,
+    backdropColor,
+    tooltipTitleColor,
+    tooltipBodyColor,
+    tooltipBgColor,
+    tooltipBorderColor,
+  } = chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -92,7 +93,7 @@ function PolarChart({
                 'dark:text-gray-400',
                 'shadow-xs',
                 'shadow-black/[0.08]',
-                'rounded-full'
+                'rounded-full',
               );
               button.style.opacity = item.hidden ? '.3' : '';
               button.onclick = () => {
@@ -152,12 +153,12 @@ function PolarChart({
   }, [currentTheme]);
 
   return (
-    <div className="grow flex flex-col justify-center">
+    <div className='grow flex flex-col justify-center'>
       <div>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
-      <div className="px-5 pt-2 pb-6">
-        <ul ref={legend} className="flex flex-wrap justify-center -m-1"></ul>
+      <div className='px-5 pt-2 pb-6'>
+        <ul ref={legend} className='flex flex-wrap justify-center -m-1'></ul>
       </div>
     </div>
   );

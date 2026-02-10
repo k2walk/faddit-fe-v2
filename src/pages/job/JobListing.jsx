@@ -16,7 +16,6 @@ import Image06 from '../../images/company-icon-01.svg';
 import Image07 from '../../images/company-icon-02.svg';
 
 function JobListing() {
-
   const items = [
     {
       id: 0,
@@ -133,63 +132,79 @@ function JobListing() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden">
-
+    <div className='flex h-[100dvh] overflow-hidden'>
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-
+      <div className='relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden'>
         {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <main className="grow">
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-[96rem] mx-auto">
-
+        <main className='grow'>
+          <div className='px-4 sm:px-6 lg:px-8 py-8 w-full max-w-[96rem] mx-auto'>
             {/* Page header */}
-            <div className="sm:flex sm:justify-between sm:items-center mb-5">
-
+            <div className='sm:flex sm:justify-between sm:items-center mb-5'>
               {/* Left: Title */}
-              <div className="mb-4 sm:mb-0">
-                <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Search For Jobs</h1>
+              <div className='mb-4 sm:mb-0'>
+                <h1 className='text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold'>
+                  Search For Jobs
+                </h1>
               </div>
 
               {/* Post a job button */}
-              <button className="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">Post A Job</button>
-
+              <button className='btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white'>
+                Post A Job
+              </button>
             </div>
 
             {/* Page content */}
-            <div className="flex flex-col space-y-10 sm:flex-row sm:space-x-6 sm:space-y-0 md:flex-col md:space-x-0 md:space-y-10 xl:flex-row xl:space-x-6 xl:space-y-0 mt-9">
-
+            <div className='flex flex-col space-y-10 sm:flex-row sm:space-x-6 sm:space-y-0 md:flex-col md:space-x-0 md:space-y-10 xl:flex-row xl:space-x-6 xl:space-y-0 mt-9'>
               {/* Sidebar */}
               <JobSidebar />
 
               {/* Content */}
               <div className='w-full'>
-
                 {/* Search form */}
-                <div className="mb-5">
-                  <form className="relative">
-                    <label htmlFor="job-search" className="sr-only">Search</label>
-                    <input id="job-search" className="form-input w-full pl-9 bg-white dark:bg-gray-800" type="search" placeholder="Search job title or keyword…" />
-                    <button className="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                      <svg className="shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2" width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                        <path d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
+                <div className='mb-5'>
+                  <form className='relative'>
+                    <label htmlFor='job-search' className='sr-only'>
+                      Search
+                    </label>
+                    <input
+                      id='job-search'
+                      className='form-input w-full pl-9 bg-white dark:bg-gray-800'
+                      type='search'
+                      placeholder='Search job title or keyword…'
+                    />
+                    <button
+                      className='absolute inset-0 right-auto group'
+                      type='submit'
+                      aria-label='Search'
+                    >
+                      <svg
+                        className='shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2'
+                        width='16'
+                        height='16'
+                        viewBox='0 0 16 16'
+                        xmlns='http://www.w3.org/2000/svg'
+                      >
+                        <path d='M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z' />
+                        <path d='M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z' />
                       </svg>
                     </button>
                   </form>
                 </div>
 
                 {/* Jobs header */}
-                <div className="flex justify-between items-center mb-4">
-                  <div className="text-sm text-gray-500 dark:text-gray-400 italic">Showing 289 Jobs</div>
+                <div className='flex justify-between items-center mb-4'>
+                  <div className='text-sm text-gray-500 dark:text-gray-400 italic'>
+                    Showing 289 Jobs
+                  </div>
                   {/* Sort */}
-                  <div className="text-sm">
+                  <div className='text-sm'>
                     <span>Sort by </span>
-                    <DropdownSort align="right" />
+                    <DropdownSort align='right' />
                   </div>
                 </div>
 
@@ -213,19 +228,14 @@ function JobListing() {
                 </div>
 
                 {/* Pagination */}
-                <div className="mt-6">
+                <div className='mt-6'>
                   <PaginationNumeric />
                 </div>
-
               </div>
-
             </div>
-
           </div>
         </main>
-
       </div>
-
     </div>
   );
 }

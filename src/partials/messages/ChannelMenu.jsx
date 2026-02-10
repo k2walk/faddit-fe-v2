@@ -6,7 +6,6 @@ import ChannelImage02 from '../../images/channel-02.png';
 import ChannelImage03 from '../../images/channel-03.png';
 
 function ChannelMenu() {
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef(null);
@@ -16,7 +15,8 @@ function ChannelMenu() {
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
-      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target))
+        return;
       setDropdownOpen(false);
     };
     document.addEventListener('click', clickHandler);
@@ -34,31 +34,40 @@ function ChannelMenu() {
   });
 
   return (
-    <div className="relative">
+    <div className='relative'>
       <button
         ref={trigger}
-        className="grow flex items-center truncate"
-        aria-haspopup="true"
+        className='grow flex items-center truncate'
+        aria-haspopup='true'
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <img className="w-8 h-8 rounded-full mr-2" src={ChannelImage01} width="32" height="32" alt="Group 01" />
-        <div className="truncate">
-          <span className="font-semibold text-gray-800 dark:text-gray-100">#Marketing</span>
+        <img
+          className='w-8 h-8 rounded-full mr-2'
+          src={ChannelImage01}
+          width='32'
+          height='32'
+          alt='Group 01'
+        />
+        <div className='truncate'>
+          <span className='font-semibold text-gray-800 dark:text-gray-100'>#Marketing</span>
         </div>
-        <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" viewBox="0 0 12 12">
-          <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+        <svg
+          className='w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500'
+          viewBox='0 0 12 12'
+        >
+          <path d='M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z' />
         </svg>
       </button>
       <Transition
-        className="origin-top-right z-10 absolute top-full left-0 min-w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1"
+        className='origin-top-right z-10 absolute top-full left-0 min-w-60 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1'
         show={dropdownOpen}
-        enter="transition ease-out duration-200 transform"
-        enterStart="opacity-0 -translate-y-2"
-        enterEnd="opacity-100 translate-y-0"
-        leave="transition ease-out duration-200"
-        leaveStart="opacity-100"
-        leaveEnd="opacity-0"
+        enter='transition ease-out duration-200 transform'
+        enterStart='opacity-0 -translate-y-2'
+        enterEnd='opacity-100 translate-y-0'
+        leave='transition ease-out duration-200'
+        leaveStart='opacity-100'
+        leaveEnd='opacity-0'
       >
         <ul
           ref={dropdown}
@@ -66,34 +75,67 @@ function ChannelMenu() {
           onBlur={() => setDropdownOpen(false)}
         >
           <li>
-            <a className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 block py-1.5 px-3" href="#0" onClick={() => setDropdownOpen(false)}>
-              <div className="flex items-center justify-between">
-                <div className="grow flex items-center truncate">
-                  <img className="w-7 h-7 rounded-full mr-2" src={ChannelImage01} width="28" height="28" alt="Channel 01" />
-                  <div className="truncate">#Marketing</div>
+            <a
+              className='font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 block py-1.5 px-3'
+              href='#0'
+              onClick={() => setDropdownOpen(false)}
+            >
+              <div className='flex items-center justify-between'>
+                <div className='grow flex items-center truncate'>
+                  <img
+                    className='w-7 h-7 rounded-full mr-2'
+                    src={ChannelImage01}
+                    width='28'
+                    height='28'
+                    alt='Channel 01'
+                  />
+                  <div className='truncate'>#Marketing</div>
                 </div>
-                <svg className="w-3 h-3 shrink-0 fill-current text-violet-500 ml-1" viewBox="0 0 12 12">
-                  <path d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
+                <svg
+                  className='w-3 h-3 shrink-0 fill-current text-violet-500 ml-1'
+                  viewBox='0 0 12 12'
+                >
+                  <path d='M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z' />
                 </svg>
               </div>
             </a>
           </li>
           <li>
-            <a className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 block py-1.5 px-3" href="#0" onClick={() => setDropdownOpen(false)}>
-              <div className="flex items-center justify-between">
-                <div className="grow flex items-center truncate">
-                  <img className="w-7 h-7 rounded-full mr-2" src={ChannelImage02} width="28" height="28" alt="Channel 02" />
-                  <div className="truncate">#Developing</div>
+            <a
+              className='font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 block py-1.5 px-3'
+              href='#0'
+              onClick={() => setDropdownOpen(false)}
+            >
+              <div className='flex items-center justify-between'>
+                <div className='grow flex items-center truncate'>
+                  <img
+                    className='w-7 h-7 rounded-full mr-2'
+                    src={ChannelImage02}
+                    width='28'
+                    height='28'
+                    alt='Channel 02'
+                  />
+                  <div className='truncate'>#Developing</div>
                 </div>
               </div>
             </a>
           </li>
           <li>
-            <a className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 block py-1.5 px-3" href="#0" onClick={() => setDropdownOpen(false)}>
-              <div className="flex items-center justify-between">
-                <div className="grow flex items-center truncate">
-                  <img className="w-7 h-7 rounded-full mr-2" src={ChannelImage03} width="28" height="28" alt="Channel 03" />
-                  <div className="truncate">#ProductSupport</div>
+            <a
+              className='font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 block py-1.5 px-3'
+              href='#0'
+              onClick={() => setDropdownOpen(false)}
+            >
+              <div className='flex items-center justify-between'>
+                <div className='grow flex items-center truncate'>
+                  <img
+                    className='w-7 h-7 rounded-full mr-2'
+                    src={ChannelImage03}
+                    width='28'
+                    height='28'
+                    alt='Channel 03'
+                  />
+                  <div className='truncate'>#ProductSupport</div>
                 </div>
               </div>
             </a>
@@ -101,7 +143,7 @@ function ChannelMenu() {
         </ul>
       </Transition>
     </div>
-  )
+  );
 }
 
 export default ChannelMenu;

@@ -3,7 +3,13 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, BarController, BarElement, LinearScale, TimeScale, Tooltip, Legend,
+  Chart,
+  BarController,
+  BarElement,
+  LinearScale,
+  TimeScale,
+  Tooltip,
+  Legend,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
@@ -12,18 +18,14 @@ import { formatValue } from '../utils/Utils';
 
 Chart.register(BarController, BarElement, LinearScale, TimeScale, Tooltip, Legend);
 
-function BarChart05({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function BarChart05({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors; 
+  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } =
+    chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -149,7 +151,7 @@ function BarChart05({
     });
     setChart(newChart);
     return () => newChart.destroy();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -175,18 +177,20 @@ function BarChart05({
 
   return (
     <React.Fragment>
-      <div className="px-5 py-3">
-        <div className="flex flex-wrap justify-between items-end gap-y-2 gap-x-4">
-          <div className="flex items-center">
-            <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$1,347.09</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Net</div>
+      <div className='px-5 py-3'>
+        <div className='flex flex-wrap justify-between items-end gap-y-2 gap-x-4'>
+          <div className='flex items-center'>
+            <div className='text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2'>
+              $1,347.09
+            </div>
+            <div className='text-sm text-gray-500 dark:text-gray-400'>Net</div>
           </div>
-          <div className="grow mb-1">
-            <ul ref={legend} className="flex flex-wrap gap-x-4 sm:justify-end"></ul>
+          <div className='grow mb-1'>
+            <ul ref={legend} className='flex flex-wrap gap-x-4 sm:justify-end'></ul>
           </div>
         </div>
       </div>
-      <div className="grow">
+      <div className='grow'>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>

@@ -3,7 +3,13 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, BarController, BarElement, LinearScale, CategoryScale, Tooltip, Legend,
+  Chart,
+  BarController,
+  BarElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
@@ -18,18 +24,14 @@ import n26Icon from '../images/company-icon-04.svg';
 
 Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip, Legend);
 
-function BarChart06({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function BarChart06({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors; 
+  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } =
+    chartColors;
 
   const images = [coinbaseIcon, hsbcIcon, qontoIcon, n26Icon];
   const imageEls = [];
@@ -168,7 +170,7 @@ function BarChart06({
     });
     setChart(newChart);
     return () => newChart.destroy();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -192,10 +194,10 @@ function BarChart06({
 
   return (
     <React.Fragment>
-      <div className="px-5 py-4">
-        <ul ref={legend} className="flex flex-wrap gap-x-4"></ul>
+      <div className='px-5 py-4'>
+        <ul ref={legend} className='flex flex-wrap gap-x-4'></ul>
       </div>
-      <div className="grow">
+      <div className='grow'>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>

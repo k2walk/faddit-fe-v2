@@ -3,7 +3,14 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip,
+  Chart,
+  LineController,
+  LineElement,
+  Filler,
+  PointElement,
+  LinearScale,
+  TimeScale,
+  Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
@@ -12,19 +19,21 @@ import { adjustColorOpacity, getCssVariable, formatValue } from '../utils/Utils'
 
 Chart.register(LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip);
 
-function RealtimeChart({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function RealtimeChart({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const chartValue = useRef(null);
   const chartDeviation = useRef(null);
   const { currentTheme } = useThemeProvider();
-  const darkMode = currentTheme === 'dark';  
-  const { textColor, gridColor, tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
+  const darkMode = currentTheme === 'dark';
+  const {
+    textColor,
+    gridColor,
+    tooltipTitleColor,
+    tooltipBodyColor,
+    tooltipBgColor,
+    tooltipBorderColor,
+  } = chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -102,7 +111,7 @@ function RealtimeChart({
     });
     setChart(newChart);
     return () => newChart.destroy();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // Update header values
@@ -112,17 +121,23 @@ function RealtimeChart({
     const diff = ((currentValue - previousValue) / previousValue) * 100;
     chartValue.current.innerHTML = data.datasets[0].data[data.datasets[0].data.length - 1];
     if (diff < 0) {
-      chartDeviation.current.style.backgroundColor = adjustColorOpacity(getCssVariable('--color-red-500'), 0.2);
+      chartDeviation.current.style.backgroundColor = adjustColorOpacity(
+        getCssVariable('--color-red-500'),
+        0.2,
+      );
       chartDeviation.current.style.color = getCssVariable('--color-red-700');
     } else {
-      chartDeviation.current.style.backgroundColor = adjustColorOpacity(getCssVariable('--color-green-500'), 0.2);
+      chartDeviation.current.style.backgroundColor = adjustColorOpacity(
+        getCssVariable('--color-green-500'),
+        0.2,
+      );
       chartDeviation.current.style.color = getCssVariable('--color-green-700');
     }
     chartDeviation.current.innerHTML = `${diff > 0 ? '+' : ''}${diff.toFixed(2)}%`;
   }, [data]);
 
   useEffect(() => {
-    if (!chart) return
+    if (!chart) return;
 
     if (darkMode) {
       chart.options.scales.x.ticks.color = textColor.dark;
@@ -131,7 +146,7 @@ function RealtimeChart({
       chart.options.plugins.tooltip.titleColor = tooltipTitleColor.dark;
       chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.dark;
       chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.dark;
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark;      
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark;
     } else {
       chart.options.scales.x.ticks.color = textColor.light;
       chart.options.scales.y.ticks.color = textColor.light;
@@ -139,21 +154,22 @@ function RealtimeChart({
       chart.options.plugins.tooltip.titleColor = tooltipTitleColor.light;
       chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.light;
       chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.light;
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light; 
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light;
     }
-    chart.update('none')
-  }, [currentTheme])    
-
+    chart.update('none');
+  }, [currentTheme]);
 
   return (
     <React.Fragment>
-      <div className="px-5 py-3">
-        <div className="flex items-start">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2 tabular-nums">$<span ref={chartValue}>57.81</span></div>
-          <div ref={chartDeviation} className="text-sm font-medium px-1.5 rounded-full"></div>
+      <div className='px-5 py-3'>
+        <div className='flex items-start'>
+          <div className='text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2 tabular-nums'>
+            $<span ref={chartValue}>57.81</span>
+          </div>
+          <div ref={chartDeviation} className='text-sm font-medium px-1.5 rounded-full'></div>
         </div>
       </div>
-      <div className="grow">
+      <div className='grow'>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>

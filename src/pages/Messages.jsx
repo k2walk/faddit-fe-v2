@@ -8,8 +8,7 @@ import MessagesBody from '../partials/messages/MessagesBody';
 import MessagesFooter from '../partials/messages/MessagesFooter';
 
 function Messages() {
-
-  const contentArea = useRef(null)
+  const contentArea = useRef(null);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [msgSidebarOpen, setMsgSidebarOpen] = useState(true);
@@ -19,19 +18,25 @@ function Messages() {
   }, [msgSidebarOpen]); // automatically scroll the chat and make the most recent message visible
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden">
+    <div className='flex h-[100dvh] overflow-hidden'>
       {/* Sidebar */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} variant="v2" />
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} variant='v2' />
 
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden" ref={contentArea}>
+      <div
+        className='relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden'
+        ref={contentArea}
+      >
         {/*  Site header */}
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} variant="v2" />
+        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} variant='v2' />
 
-        <main className="grow">
-          <div className="relative flex h-full">
+        <main className='grow'>
+          <div className='relative flex h-full'>
             {/* Messages sidebar */}
-            <MessagesSidebar msgSidebarOpen={msgSidebarOpen} setMsgSidebarOpen={setMsgSidebarOpen} />
+            <MessagesSidebar
+              msgSidebarOpen={msgSidebarOpen}
+              setMsgSidebarOpen={setMsgSidebarOpen}
+            />
 
             {/* Messages body */}
             <div
@@ -39,7 +44,10 @@ function Messages() {
                 msgSidebarOpen ? 'translate-x-1/3' : 'translate-x-0'
               }`}
             >
-              <MessagesHeader msgSidebarOpen={msgSidebarOpen} setMsgSidebarOpen={setMsgSidebarOpen} />
+              <MessagesHeader
+                msgSidebarOpen={msgSidebarOpen}
+                setMsgSidebarOpen={setMsgSidebarOpen}
+              />
               <MessagesBody />
               <MessagesFooter />
             </div>

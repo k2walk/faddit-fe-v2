@@ -6,7 +6,6 @@ import LineChart from '../../charts/LineChart02';
 import { getCssVariable } from '../../utils/Utils';
 
 function DashboardCard08() {
-
   const chartData = {
     labels: [
       '12-01-2022',
@@ -40,7 +39,10 @@ function DashboardCard08() {
       // Indigo line
       {
         label: 'Current',
-        data: [73, 64, 73, 69, 104, 104, 164, 164, 120, 120, 120, 148, 142, 104, 122, 110, 104, 152, 166, 233, 268, 252, 284, 284, 333, 323],
+        data: [
+          73, 64, 73, 69, 104, 104, 164, 164, 120, 120, 120, 148, 142, 104, 122, 110, 104, 152, 166,
+          233, 268, 252, 284, 284, 333, 323,
+        ],
         borderColor: getCssVariable('--color-violet-500'),
         fill: false,
         borderWidth: 2,
@@ -56,7 +58,10 @@ function DashboardCard08() {
       // Blue line
       {
         label: 'Previous',
-        data: [184, 86, 42, 378, 42, 243, 38, 120, 0, 0, 42, 0, 84, 0, 276, 0, 124, 42, 124, 88, 88, 215, 156, 88, 124, 64],
+        data: [
+          184, 86, 42, 378, 42, 243, 38, 120, 0, 0, 42, 0, 84, 0, 276, 0, 124, 42, 124, 88, 88, 215,
+          156, 88, 124, 64,
+        ],
         borderColor: getCssVariable('--color-sky-500'),
         fill: false,
         borderWidth: 2,
@@ -72,7 +77,10 @@ function DashboardCard08() {
       // green line
       {
         label: 'Average',
-        data: [122, 170, 192, 86, 102, 124, 115, 115, 56, 104, 0, 72, 208, 186, 223, 188, 114, 162, 200, 150, 118, 118, 76, 122, 230, 268],
+        data: [
+          122, 170, 192, 86, 102, 124, 115, 115, 56, 104, 0, 72, 208, 186, 223, 188, 114, 162, 200,
+          150, 118, 118, 76, 122, 230, 268,
+        ],
         borderColor: getCssVariable('--color-green-500'),
         fill: false,
         borderWidth: 2,
@@ -89,9 +97,11 @@ function DashboardCard08() {
   };
 
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl">
-      <header className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">Sales Over Time (all stores)</h2>
+    <div className='flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-gray-800 shadow-xs rounded-xl'>
+      <header className='px-5 py-4 border-b border-gray-100 dark:border-gray-700/60 flex items-center'>
+        <h2 className='font-semibold text-gray-800 dark:text-gray-100'>
+          Sales Over Time (all stores)
+        </h2>
       </header>
       {/* Chart built with Chart.js 3 */}
       {/* Change the height attribute to adjust the chart height */}

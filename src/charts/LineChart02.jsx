@@ -3,7 +3,14 @@ import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
 import {
-  Chart, LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip,
+  Chart,
+  LineController,
+  LineElement,
+  Filler,
+  PointElement,
+  LinearScale,
+  TimeScale,
+  Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
 
@@ -12,18 +19,14 @@ import { formatValue } from '../utils/Utils';
 
 Chart.register(LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip);
 
-function LineChart02({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function LineChart02({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;  
+  const { textColor, gridColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } =
+    chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -170,19 +173,21 @@ function LineChart02({
 
   return (
     <React.Fragment>
-      <div className="px-5 py-3">
-        <div className="flex flex-wrap justify-between items-end gap-y-2 gap-x-4">
-          <div className="flex items-start">
-            <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$1,482</div>
-            <div className="text-sm font-medium text-red-700 px-1.5 bg-red-500/20 rounded-full">-22%</div>
+      <div className='px-5 py-3'>
+        <div className='flex flex-wrap justify-between items-end gap-y-2 gap-x-4'>
+          <div className='flex items-start'>
+            <div className='text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2'>$1,482</div>
+            <div className='text-sm font-medium text-red-700 px-1.5 bg-red-500/20 rounded-full'>
+              -22%
+            </div>
           </div>
-          <div className="grow mb-1">
-            <ul ref={legend} className="flex flex-wrap gap-x-4 sm:justify-end"></ul>
+          <div className='grow mb-1'>
+            <ul ref={legend} className='flex flex-wrap gap-x-4 sm:justify-end'></ul>
           </div>
         </div>
       </div>
       {/* Chart built with Chart.js 3 */}
-      <div className="grow">
+      <div className='grow'>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>

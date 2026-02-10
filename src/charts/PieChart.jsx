@@ -2,9 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useThemeProvider } from '../utils/ThemeContext';
 
 import { chartColors } from './ChartjsConfig';
-import {
-  Chart, PieController, ArcElement, TimeScale, Tooltip,
-} from 'chart.js';
+import { Chart, PieController, ArcElement, TimeScale, Tooltip } from 'chart.js';
 import 'chartjs-adapter-moment';
 
 // Import utilities
@@ -12,18 +10,13 @@ import { getCssVariable } from '../utils/Utils';
 
 Chart.register(PieController, ArcElement, TimeScale, Tooltip);
 
-function PieChart({
-  data,
-  width,
-  height
-}) {
-
-  const [chart, setChart] = useState(null)
+function PieChart({ data, width, height }) {
+  const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const legend = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';
-  const { tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors; 
+  const { tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -119,26 +112,26 @@ function PieChart({
     if (!chart) return;
 
     if (darkMode) {
-      chart.options.plugins.tooltip.titleColor = tooltipTitleColor.dark
-      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.dark
-      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.dark
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark
+      chart.options.plugins.tooltip.titleColor = tooltipTitleColor.dark;
+      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.dark;
+      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.dark;
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark;
     } else {
-      chart.options.plugins.tooltip.titleColor = tooltipTitleColor.light
-      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.light
-      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.light
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light
+      chart.options.plugins.tooltip.titleColor = tooltipTitleColor.light;
+      chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.light;
+      chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.light;
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light;
     }
     chart.update('none');
   }, [currentTheme]);
 
   return (
-    <div className="grow flex flex-col justify-center">
+    <div className='grow flex flex-col justify-center'>
       <div>
         <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
-      <div className="px-5 py-4">
-        <ul ref={legend} className="flex flex-wrap justify-center -m-1" />
+      <div className='px-5 py-4'>
+        <ul ref={legend} className='flex flex-wrap justify-center -m-1' />
       </div>
     </div>
   );

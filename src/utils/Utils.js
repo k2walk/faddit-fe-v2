@@ -1,14 +1,16 @@
-export const formatValue = (value) => Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumSignificantDigits: 3,
-  notation: 'compact',
-}).format(value);
+export const formatValue = (value) =>
+  Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumSignificantDigits: 3,
+    notation: 'compact',
+  }).format(value);
 
-export const formatThousands = (value) => Intl.NumberFormat('en-US', {
-  maximumSignificantDigits: 3,
-  notation: 'compact',
-}).format(value);
+export const formatThousands = (value) =>
+  Intl.NumberFormat('en-US', {
+    maximumSignificantDigits: 3,
+    notation: 'compact',
+  }).format(value);
 
 export const getCssVariable = (variable) => {
   return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
@@ -54,10 +56,10 @@ export const oklchToRGBA = (oklchColor) => {
   const tempDiv = document.createElement('div');
   tempDiv.style.color = oklchColor;
   document.body.appendChild(tempDiv);
-  
+
   // Get the computed style and convert to RGB
   const computedColor = window.getComputedStyle(tempDiv).color;
   document.body.removeChild(tempDiv);
-  
+
   return computedColor;
 };

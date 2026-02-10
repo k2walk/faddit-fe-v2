@@ -5,10 +5,7 @@ import Image01 from '../../images/icon-01.svg';
 import Image02 from '../../images/icon-02.svg';
 import Image03 from '../../images/icon-03.svg';
 
-function OrdersTable({
-  selectedItems
-}) {
-
+function OrdersTable({ selectedItems }) {
   const orders = [
     {
       id: '0',
@@ -21,7 +18,8 @@ function OrdersTable({
       items: '1',
       location: '🇨🇳 Shanghai, CN',
       type: 'Subscription',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '1',
@@ -34,7 +32,8 @@ function OrdersTable({
       items: '2',
       location: '🇲🇽 Mexico City, MX',
       type: 'Subscription',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '2',
@@ -47,7 +46,8 @@ function OrdersTable({
       items: '2',
       location: '🇮🇹 Milan, IT',
       type: 'One-time',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '3',
@@ -60,7 +60,8 @@ function OrdersTable({
       items: '1',
       location: '🇮🇹 Bologna, IT',
       type: 'One-time',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '4',
@@ -73,7 +74,8 @@ function OrdersTable({
       items: '1',
       location: '🇬🇧 London, UK',
       type: 'Subscription',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '5',
@@ -86,7 +88,8 @@ function OrdersTable({
       items: '1',
       location: '🇫🇷 Paris, FR',
       type: 'One-time',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '6',
@@ -99,7 +102,8 @@ function OrdersTable({
       items: '1',
       location: '🇫🇷 Marseille, FR',
       type: 'Subscription',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '7',
@@ -112,7 +116,8 @@ function OrdersTable({
       items: '2',
       location: '🇺🇸 New York, USA',
       type: 'Subscription',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '8',
@@ -125,7 +130,8 @@ function OrdersTable({
       items: '2',
       location: '🇨🇳 Shanghai, CN',
       type: 'One-time',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     },
     {
       id: '9',
@@ -138,8 +144,9 @@ function OrdersTable({
       items: '1',
       location: '🇬🇧 Sheffield, UK',
       type: 'Subscription',
-      description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-    }
+      description:
+        'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    },
   ];
 
   const [selectAll, setSelectAll] = useState(false);
@@ -153,18 +160,18 @@ function OrdersTable({
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    setIsCheck(list.map(li => li.id));
+    setIsCheck(list.map((li) => li.id));
     if (selectAll) {
       setIsCheck([]);
     }
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const { id, checked } = e.target;
     setSelectAll(false);
     setIsCheck([...isCheck, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter(item => item !== id));
+      setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
 
@@ -174,80 +181,83 @@ function OrdersTable({
   }, [isCheck]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-xs rounded-xl relative">
-      <header className="px-5 py-4">
-        <h2 className="font-semibold text-gray-800 dark:text-gray-100">All Orders <span className="text-gray-400 dark:text-gray-500 font-medium">442</span></h2>
+    <div className='bg-white dark:bg-gray-800 shadow-xs rounded-xl relative'>
+      <header className='px-5 py-4'>
+        <h2 className='font-semibold text-gray-800 dark:text-gray-100'>
+          All Orders <span className='text-gray-400 dark:text-gray-500 font-medium'>442</span>
+        </h2>
       </header>
       <div>
-
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-gray-300 divide-y divide-gray-100 dark:divide-gray-700/60">
+        <div className='overflow-x-auto'>
+          <table className='table-auto w-full dark:text-gray-300 divide-y divide-gray-100 dark:divide-gray-700/60'>
             {/* Table header */}
-            <thead className="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-100 dark:border-gray-700/60">
+            <thead className='text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-100 dark:border-gray-700/60'>
               <tr>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                  <div className="flex items-center">
-                    <label className="inline-flex">
-                      <span className="sr-only">Select all</span>
-                      <input className="form-checkbox" type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px'>
+                  <div className='flex items-center'>
+                    <label className='inline-flex'>
+                      <span className='sr-only'>Select all</span>
+                      <input
+                        className='form-checkbox'
+                        type='checkbox'
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
                     </label>
                   </div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Order</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Order</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Date</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Date</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Customer</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Customer</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Total</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Total</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Status</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Status</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold">Items</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold'>Items</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Location</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Location</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Payment type</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Payment type</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <span className="sr-only">Menu</span>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <span className='sr-only'>Menu</span>
                 </th>
               </tr>
             </thead>
             {/* Table body */}
-            {
-              list.map(order => {
-                return (
-                  <Orders
-                    key={order.id}
-                    id={order.id}
-                    image={order.image}
-                    order={order.order}
-                    date={order.date}
-                    customer={order.customer}
-                    total={order.total}
-                    status={order.status}
-                    items={order.items}
-                    location={order.location}
-                    type={order.type}
-                    description={order.description}
-                    handleClick={handleClick}
-                    isChecked={isCheck.includes(order.id)}
-                  />
-                )
-              })
-            }
+            {list.map((order) => {
+              return (
+                <Orders
+                  key={order.id}
+                  id={order.id}
+                  image={order.image}
+                  order={order.order}
+                  date={order.date}
+                  customer={order.customer}
+                  total={order.total}
+                  status={order.status}
+                  items={order.items}
+                  location={order.location}
+                  type={order.type}
+                  description={order.description}
+                  handleClick={handleClick}
+                  isChecked={isCheck.includes(order.id)}
+                />
+              );
+            })}
           </table>
-
         </div>
       </div>
     </div>

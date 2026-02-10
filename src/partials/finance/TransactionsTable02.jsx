@@ -11,11 +11,7 @@ import Image07 from '../../images/transactions-image-06.svg';
 import Image08 from '../../images/transactions-image-07.svg';
 import Image09 from '../../images/transactions-image-08.svg';
 
-function TransactionsTable02({
-  selectedItems,
-  setTransactionPanelOpen
-}) {
-
+function TransactionsTable02({ selectedItems, setTransactionPanelOpen }) {
   const transactions = [
     {
       id: '0',
@@ -105,64 +101,69 @@ function TransactionsTable02({
 
   useEffect(() => {
     setList(transactions);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    setIsCheck(list.map(li => li.id));
+    setIsCheck(list.map((li) => li.id));
     if (selectAll) {
       setIsCheck([]);
     }
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const { id, checked } = e.target;
     setSelectAll(false);
     setIsCheck([...isCheck, id]);
     if (!checked) {
-      setIsCheck(isCheck.filter(item => item !== id));
+      setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
 
   useEffect(() => {
     selectedItems(isCheck);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCheck]);
 
   return (
-    <div className="bg-white dark:bg-gray-900">
+    <div className='bg-white dark:bg-gray-900'>
       <div>
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-gray-300">
+        <div className='overflow-x-auto'>
+          <table className='table-auto w-full dark:text-gray-300'>
             {/* Table header */}
-            <thead className="text-xs font-semibold uppercase text-gray-500 border-t border-b border-gray-200 dark:border-gray-700/60">
+            <thead className='text-xs font-semibold uppercase text-gray-500 border-t border-b border-gray-200 dark:border-gray-700/60'>
               <tr>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                  <div className="flex items-center">
-                    <label className="inline-flex">
-                      <span className="sr-only">Select all</span>
-                      <input className="form-checkbox" type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px'>
+                  <div className='flex items-center'>
+                    <label className='inline-flex'>
+                      <span className='sr-only'>Select all</span>
+                      <input
+                        className='form-checkbox'
+                        type='checkbox'
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                      />
                     </label>
                   </div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Counterparty</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Counterparty</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Payment Date</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Payment Date</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-left">Status</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-left'>Status</div>
                 </th>
-                <th className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                  <div className="font-semibold text-right">Amount</div>
+                <th className='px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap'>
+                  <div className='font-semibold text-right'>Amount</div>
                 </th>
               </tr>
             </thead>
             {/* Table body */}
-            <tbody className="text-sm divide-y divide-gray-100 dark:divide-gray-700/60 border-b border-gray-200 dark:border-gray-700/60">
+            <tbody className='text-sm divide-y divide-gray-100 dark:divide-gray-700/60 border-b border-gray-200 dark:border-gray-700/60'>
               {list.map((transaction) => {
                 return (
                   <TransactionItem
