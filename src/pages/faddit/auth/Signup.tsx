@@ -1,32 +1,62 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import ModalFooterBasic from '../../../components/ModalFooterBasic';
 import ModalAction from '../../../components/ModalAction';
 import { AGREEMENT_OPTIONS } from '../../../constants/agreements';
 
+interface SignupFormInputs {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  verificationCode: string;
+  serviceAgreement: boolean;
+  userAgreement: boolean;
+  marketingAgreement: boolean;
+}
+
 const Signup: React.FC = () => {
-  const [agreements, setAgreements] = useState<{ [key: string]: boolean }>({});
-  const [allAgreed, setAllAgreed] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    setError,
+    formState: { errors },
+  } = useForm<SignupFormInputs>({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      verificationCode: '',
+      serviceAgreement: false,
+      userAgreement: false,
+      marketingAgreement: false,
+    },
+  });
+
   const [termModalOpen, setTermModalOpen] = useState(false);
   const [currentTermContent, setCurrentTermContent] = useState({ title: '', content: '' });
   const [currentTermId, setCurrentTermId] = useState<string>('');
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
-  // Email Verification State
-  const [email, setEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
   const [isVerificationVisible, setIsVerificationVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState(180); // 3 minutes
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
-  useEffect(() => {
-    const allRequiredAgreed = AGREEMENT_OPTIONS.every((option) =>
-      option.required ? agreements[option.id] : true,
-    );
-    const allChecked = AGREEMENT_OPTIONS.every((option) => agreements[option.id]);
-    setAllAgreed(allChecked);
-  }, [agreements]);
+  const emailValue = watch('email');
+  const serviceAgreement = watch('serviceAgreement');
+  const userAgreement = watch('userAgreement');
+  const marketingAgreement = watch('marketingAgreement');
+  const verificationCodeValue = watch('verificationCode');
+
+  const allAgreed = serviceAgreement && userAgreement && marketingAgreement;
 
   // Timer Effect
   useEffect(() => {
@@ -41,18 +71,32 @@ const Signup: React.FC = () => {
     return () => clearInterval(interval);
   }, [isTimerActive, timeLeft]);
 
-  const handleAgreementChange = (id: string) => {
-    setAgreements((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  useEffect(() => {
+    if (verificationCodeValue === '123456') {
+      setIsEmailVerified(true);
+      setIsTimerActive(false);
+    } else {
+      setIsEmailVerified(false);
+    }
+  }, [verificationCodeValue]);
+
+  useEffect(() => {
+    if (isEmailVerified) {
+      trigger('email');
+    }
+  }, [isEmailVerified, trigger]);
+
+  useEffect(() => {
+    if (isEmailVerified) {
+      setIsEmailVerified(false);
+    }
+  }, [emailValue]);
 
   const handleAllAgreementChange = () => {
-    const newAgreements: { [key: string]: boolean } = {};
-    const newState = !allAgreed;
-    AGREEMENT_OPTIONS.forEach((option) => {
-      newAgreements[option.id] = newState;
-    });
-    setAgreements(newAgreements);
-    setAllAgreed(newState);
+    const newValue = !allAgreed;
+    setValue('serviceAgreement', newValue, { shouldValidate: true });
+    setValue('userAgreement', newValue, { shouldValidate: true });
+    setValue('marketingAgreement', newValue, { shouldValidate: true });
   };
 
   const openTermModal = (id: string, title: string, content: string) => {
@@ -63,23 +107,29 @@ const Signup: React.FC = () => {
 
   const handleTermModalConfirm = () => {
     if (currentTermId) {
-      setAgreements((prev) => ({ ...prev, [currentTermId]: true }));
+      const fieldName = getAgreementFieldName(currentTermId);
+      if (fieldName) {
+        setValue(fieldName, true, { shouldValidate: true });
+      }
     }
     setTermModalOpen(false);
   };
 
-  const isSignupDisabled = !AGREEMENT_OPTIONS.every((option) =>
-    option.required ? agreements[option.id] : true,
-  );
-
-  // Email Verification Handlers
-  const handleRequestVerification = (e: React.MouseEvent) => {
+  const handleRequestVerification = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!email) return;
+    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
+    if (!emailValue || !emailPattern.test(emailValue)) {
+      await trigger('email');
+      return;
+    }
+
     setIsVerificationVisible(true);
     setTimeLeft(180);
     setIsTimerActive(true);
     setModalOpen(true);
+    setValue('verificationCode', '');
+    setIsEmailVerified(false);
   };
 
   const handleResend = (e: React.MouseEvent) => {
@@ -87,6 +137,8 @@ const Signup: React.FC = () => {
     setTimeLeft(180);
     setIsTimerActive(true);
     setModalOpen(true);
+    setValue('verificationCode', '');
+    setIsEmailVerified(false);
   };
 
   const formatTime = (seconds: number) => {
@@ -95,100 +147,177 @@ const Signup: React.FC = () => {
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+  const getAgreementFieldName = (id: string): keyof SignupFormInputs | undefined => {
+    switch (id) {
+      case 'service-terms':
+        return 'serviceAgreement';
+      case 'member-info-terms':
+        return 'userAgreement';
+      case 'marketing-terms':
+        return 'marketingAgreement';
+      default:
+        return undefined;
+    }
+  };
+
+  const onSubmit: SubmitHandler<SignupFormInputs> = (data) => {
+    console.log({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      serviceAgreement: data.serviceAgreement,
+      userAgreement: data.userAgreement,
+      marketingAgreement: data.marketingAgreement,
+    });
+  };
+
+  const onError = (errors: any) => {
+    if (errors.serviceAgreement || errors.userAgreement || errors.marketingAgreement) {
+      setIsAccordionOpen(true);
+    }
+  };
+
   return (
     <>
-      <h1 className='text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6'>회원가입</h1>
+      <h1 className='mb-6 text-3xl font-bold text-gray-800 dark:text-gray-100'>회원가입</h1>
       {/* Form */}
-      <form>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <div className='space-y-4'>
           <div>
-            <label className='block text-sm font-medium mb-1' htmlFor='name'>
+            <label className='mb-1 block text-sm font-medium' htmlFor='name'>
               이름
             </label>
-            <input id='name' className='form-input w-full' type='text' />
+            <input
+              id='name'
+              className={`form-input w-full ${errors.name ? 'border-red-500' : ''}`}
+              type='text'
+              {...register('name', { required: '이름을 입력해주세요.' })}
+            />
+            {errors.name && (
+              <span className='mt-1 text-xs text-red-500'>{errors.name.message}</span>
+            )}
           </div>
 
           {/* Email Input with Verification */}
           <div>
-            <label className='block text-sm font-medium mb-1' htmlFor='email'>
+            <label className='mb-1 block text-sm font-medium' htmlFor='email'>
               이메일
             </label>
             <div className='relative'>
               <input
                 id='email'
-                className='form-input w-full pr-20'
+                className={`form-input w-full pr-20 ${errors.email ? 'border-red-500' : ''}`}
                 type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register('email', {
+                  required: '이메일을 입력해주세요.',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: '유효한 이메일 주소를 입력해주세요.',
+                  },
+                  validate: () => isEmailVerified || '이메일 인증을 완료해주세요.',
+                })}
               />
               <button
                 type='button'
-                className={`absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-medium transition-colors ${
-                  email
-                    ? 'text-faddit hover:opacity-80 cursor-pointer'
-                    : 'text-gray-400 cursor-not-allowed'
+                className={`absolute top-1/2 right-4 -translate-y-1/2 transform text-sm font-medium transition-colors ${
+                  emailValue && (!errors.email || errors.email.type === 'validate')
+                    ? 'text-faddit cursor-pointer hover:opacity-80'
+                    : 'cursor-not-allowed text-gray-400'
                 }`}
                 onClick={handleRequestVerification}
-                disabled={!email}
+                disabled={!emailValue || (!!errors.email && errors.email.type !== 'validate')}
               >
                 인증하기
               </button>
             </div>
+            {errors.email && (
+              <span className='mt-1 text-xs text-red-500'>{errors.email.message}</span>
+            )}
 
             {/* Verification Code Section */}
             {isVerificationVisible && (
-              <div className='mt-2 flex items-center space-x-2'>
-                <div className='relative w-full'>
-                  <input
-                    id='verificationCode'
-                    className='form-input w-full'
-                    type='text'
-                    placeholder='인증번호 입력'
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                  />
-                  <span className='absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-red-500'>
-                    {formatTime(timeLeft)}
-                  </span>
+              <div className='mt-2'>
+                <div className='flex items-center space-x-2'>
+                  <div className='relative w-full'>
+                    <input
+                      id='verificationCode'
+                      className={`form-input w-full ${errors.verificationCode ? 'border-red-500' : ''}`}
+                      type='text'
+                      placeholder='인증번호 입력'
+                      {...register('verificationCode', {
+                        required: '인증번호를 입력해주세요.',
+                        validate: (value) => value === '123456' || '인증번호가 올바르지 않습니다.',
+                      })}
+                    />
+                    {!isEmailVerified && (
+                      <span className='absolute top-1/2 right-3 -translate-y-1/2 transform text-sm text-red-500'>
+                        {formatTime(timeLeft)}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type='button'
+                    className='btn-sm border-gray-200 whitespace-nowrap text-gray-800 hover:border-gray-300 dark:border-gray-700/60 dark:text-gray-300 dark:hover:border-gray-600'
+                    onClick={handleResend}
+                  >
+                    재전송
+                  </button>
                 </div>
-                <button
-                  type='button'
-                  className='btn-sm border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 whitespace-nowrap'
-                  onClick={handleResend}
-                >
-                  재전송
-                </button>
+                {errors.verificationCode && (
+                  <span className='mt-1 text-xs text-red-500'>
+                    {errors.verificationCode.message}
+                  </span>
+                )}
+                {isEmailVerified && !errors.verificationCode && (
+                  <span className='mt-1 text-xs text-green-500'>인증되었습니다.</span>
+                )}
               </div>
             )}
           </div>
 
           <div>
-            <label className='block text-sm font-medium mb-1' htmlFor='password'>
+            <label className='mb-1 block text-sm font-medium' htmlFor='password'>
               비밀번호
             </label>
-            <input id='password' className='form-input w-full' type='password' autoComplete='on' />
+            <input
+              id='password'
+              className={`form-input w-full ${errors.password ? 'border-red-500' : ''}`}
+              type='password'
+              autoComplete='on'
+              {...register('password', { required: '비밀번호를 입력해주세요.' })}
+            />
+            {errors.password && (
+              <span className='mt-1 text-xs text-red-500'>{errors.password.message}</span>
+            )}
           </div>
           <div>
-            <label className='block text-sm font-medium mb-1' htmlFor='passwordConfirm'>
+            <label className='mb-1 block text-sm font-medium' htmlFor='passwordConfirm'>
               비밀번호 확인
             </label>
             <input
               id='passwordConfirm'
-              className='form-input w-full'
+              className={`form-input w-full ${errors.passwordConfirm ? 'border-red-500' : ''}`}
               type='password'
               autoComplete='on'
+              {...register('passwordConfirm', {
+                required: '비밀번호 확인을 입력해주세요.',
+                validate: (value) => value === watch('password') || '비밀번호가 일치하지 않습니다.',
+              })}
             />
+            {errors.passwordConfirm && (
+              <span className='mt-1 text-xs text-red-500'>{errors.passwordConfirm.message}</span>
+            )}
           </div>
         </div>
 
         {/* Terms Agreement */}
-        <div className='mt-6 border border-gray-200 dark:border-gray-700/60 rounded-lg p-4 bg-white dark:bg-gray-800 translate-y-0'>
+        <div className='mt-6 translate-y-0 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700/60 dark:bg-gray-800'>
           <div
-            className='flex items-center justify-between cursor-pointer'
+            className='flex cursor-pointer items-center justify-between'
             onClick={() => setIsAccordionOpen(!isAccordionOpen)}
           >
             <label
-              className='flex items-center cursor-pointer'
+              className='flex cursor-pointer items-center'
               onClick={(e) => e.stopPropagation()}
             >
               <input
@@ -198,7 +327,7 @@ const Signup: React.FC = () => {
                 onChange={handleAllAgreementChange}
               />
               <div
-                className='text-sm font-medium ml-2 text-gray-800 dark:text-gray-100 select-none'
+                className='ml-2 text-sm font-medium text-gray-800 select-none dark:text-gray-100'
                 onClick={() => setIsAccordionOpen(!isAccordionOpen)}
               >
                 전체 동의하기
@@ -206,7 +335,7 @@ const Signup: React.FC = () => {
             </label>
             <button
               type='button'
-              className={`ml-2 text-gray-400 hover:text-gray-500 transform transition-transform duration-200 ${
+              className={`ml-2 transform text-gray-400 transition-transform duration-200 hover:text-gray-500 ${
                 isAccordionOpen ? 'rotate-180' : ''
               }`}
               onClick={(e) => {
@@ -214,79 +343,85 @@ const Signup: React.FC = () => {
                 setIsAccordionOpen(!isAccordionOpen);
               }}
             >
-              <svg className='w-4 h-4 fill-current' viewBox='0 0 16 16'>
+              <svg className='h-4 w-4 fill-current' viewBox='0 0 16 16'>
                 <path d='M8 12L2 6h12l-6 6z' />
               </svg>
             </button>
           </div>
 
           <div
-            className={`space-y-3 mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/60 ${
+            className={`mt-4 space-y-3 border-t border-gray-100 pt-4 dark:border-gray-700/60 ${
               !isAccordionOpen ? 'hidden' : ''
             }`}
           >
-            {AGREEMENT_OPTIONS.map((option) => (
-              <div key={option.id} className='flex flex-col ml-1'>
-                <div className='flex items-center justify-between'>
-                  <label className='flex items-center cursor-pointer'>
-                    <input
-                      type='checkbox'
-                      className='form-checkbox'
-                      checked={!!agreements[option.id]}
-                      onChange={() => handleAgreementChange(option.id)}
-                    />
-                    <span className='text-sm ml-2 text-gray-600 dark:text-gray-400'>
-                      {option.required ? (
-                        <span className='text-faddit font-medium mr-1'>[필수]</span>
-                      ) : (
-                        <span className='text-gray-400 font-medium mr-1'>[선택]</span>
-                      )}
-                      {option.label}
-                    </span>
-                  </label>
-                </div>
-                {option.links && (
-                  <div className='ml-6 mt-1 flex flex-wrap gap-2'>
-                    {option.links.map((link, idx) => (
-                      <button
-                        key={idx}
-                        type='button'
-                        className='text-xs text-gray-500 cursor-pointer hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 underline text-left'
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          openTermModal(option.id, link.text, link.contents);
-                        }}
-                      >
-                        {link.text} &gt;
-                      </button>
-                    ))}
+            {AGREEMENT_OPTIONS.map((option) => {
+              const fieldName = getAgreementFieldName(option.id);
+              if (!fieldName) return null;
+
+              return (
+                <div key={option.id} className='ml-1 flex flex-col'>
+                  <div className='flex items-center justify-between'>
+                    <label className='flex cursor-pointer items-center'>
+                      <input
+                        type='checkbox'
+                        className={`form-checkbox ${errors[fieldName] ? 'border-red-500' : ''}`}
+                        {...register(fieldName, {
+                          required: option.required ? '약관에 동의해주세요.' : false,
+                        })}
+                      />
+                      <span className='ml-2 text-sm text-gray-600 dark:text-gray-400'>
+                        {option.required ? (
+                          <span className='text-faddit mr-1 font-medium'>[필수]</span>
+                        ) : (
+                          <span className='mr-1 font-medium text-gray-400'>[선택]</span>
+                        )}
+                        {option.label}
+                      </span>
+                    </label>
                   </div>
-                )}
-              </div>
-            ))}
+                  {errors[fieldName] && (
+                    <span className='mt-1 ml-6 text-xs text-red-500'>
+                      {errors[fieldName]?.message}
+                    </span>
+                  )}
+                  {option.links && (
+                    <div className='mt-1 ml-6 flex flex-wrap gap-2'>
+                      {option.links.map((link, idx) => (
+                        <button
+                          key={idx}
+                          type='button'
+                          className='cursor-pointer text-left text-xs text-gray-500 underline hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            openTermModal(option.id, link.text, link.contents);
+                          }}
+                        >
+                          {link.text} &gt;
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        <div className='flex items-center justify-between mt-6'>
+        <div className='mt-6 flex items-center justify-between'>
           <button
-            className={`btn w-full ${
-              isSignupDisabled
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400'
-                : 'bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white'
-            }`}
+            className='btn w-full bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white'
             type='submit'
-            disabled={isSignupDisabled}
           >
             회원가입
           </button>
         </div>
       </form>
       {/* Footer */}
-      <div className='pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60 flex items-center justify-between text-sm'>
+      <div className='mt-6 flex items-center justify-between border-t border-gray-100 pt-5 text-sm dark:border-gray-700/60'>
         <div>이미 계정이 있으신가요?</div>
         <Link
-          className='font-medium text-faddit hover:opacity-80 transition-opacity'
+          className='text-faddit font-medium transition-opacity hover:opacity-80'
           to='/faddit/sign/in'
         >
           로그인 바로가기
@@ -300,10 +435,11 @@ const Signup: React.FC = () => {
         setModalOpen={setTermModalOpen}
         title={currentTermContent.title}
         footer={
-          <div className='px-5 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700/60'>
+          <div className='border-t border-gray-200 bg-white px-5 py-4 dark:border-gray-700/60 dark:bg-gray-800'>
             <div className='flex flex-wrap justify-end space-x-2'>
               <button
-                className='btn-sm border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-800 dark:text-gray-300 cursor-pointer'
+                type='button'
+                className='btn-sm cursor-pointer border-gray-200 text-gray-800 hover:border-gray-300 dark:border-gray-700/60 dark:text-gray-300 dark:hover:border-gray-600'
                 onClick={(e) => {
                   e.stopPropagation();
                   setTermModalOpen(false);
@@ -312,7 +448,8 @@ const Signup: React.FC = () => {
                 취소
               </button>
               <button
-                className='btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white cursor-pointer'
+                type='button'
+                className='btn-sm cursor-pointer bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white'
                 onClick={(e) => {
                   e.stopPropagation();
                   handleTermModalConfirm();
@@ -338,16 +475,16 @@ const Signup: React.FC = () => {
       {/* Email Verification Modal */}
       <ModalAction id='verification-modal' modalOpen={modalOpen} setModalOpen={setModalOpen}>
         <div className='p-4 text-center'>
-          <div className='text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2'>
+          <div className='mb-2 text-lg font-semibold text-gray-800 dark:text-gray-100'>
             이메일 인증 번호를 발송하였습니다.
           </div>
-          <p className='text-sm text-gray-600 dark:text-gray-400 mb-6'>
+          <p className='mb-6 text-sm text-gray-600 dark:text-gray-400'>
             입력하신 메일로 수신하신 번호를 확인 후
             <br />
             인증번호를 입력하여 인증을 완료하세요.
           </p>
           <button
-            className='btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white w-full'
+            className='btn w-full bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white'
             onClick={() => setModalOpen(false)}
           >
             확인
