@@ -1,0 +1,46 @@
+{
+  "folders": [
+    {
+      "path": "./"
+    }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.formatOnPaste": false, // required
+    "editor.formatOnType": false, // required
+    "editor.formatOnSave": true, // optional
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.inlineSuggest.enabled": true,
+    "workbench.editor.wrapTabs": true,
+    "workbench.editor.revealIfOpen": true,
+    "workbench.editorAssociations": {
+      "*.svg": "default"
+    },
+    "css.lint.unknownAtRules": "ignore",
+    "css.validate": false,
+    "tailwindCSS.experimental.configFile": null,
+    "editor.wordWrap": "on"
+  },
+  "extensions": {
+    "recommendations": [
+      "KylinIDETeam.gitlens",
+      "mhutchie.git-graph",
+      "dsznajder.es7-react-js-snippets",
+      "PKief.material-icon-theme",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "numso.vscode-tailwindcss-with-hex-colors",
+      "formulahendry.auto-rename-tag",
+      "formulahendry.auto-close-tag",
+      "kamikillerto.vscode-colorize",
+    ]
+  }
+}
