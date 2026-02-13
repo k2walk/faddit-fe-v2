@@ -33,25 +33,43 @@ export interface DriveItemCardProps {
   /** 카드 본문 (특징 목록 등) */
   children?: React.ReactNode;
   /** 그리드 컬럼 클래스 (기본: col-span-full sm:col-span-6 xl:col-span-3) */
+  id?: string;
+  /** 그리드 컬럼 클래스 (기본: col-span-full sm:col-span-6 xl:col-span-3) */
   className?: string;
 }
 
 const PencilIcon = ({ className }: { className?: string }) => (
-  <svg className={className} width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M11.33 2.67l2.12 2.12-8.48 8.48-2.12.01.01-2.12 8.46-8.47z" />
-    <path d="M13.5 1.5l1 1" />
+  // ... (unchanged)
+  <svg
+    className={className}
+    width='16'
+    height='16'
+    viewBox='0 0 16 16'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+  >
+    <path d='M11.33 2.67l2.12 2.12-8.48 8.48-2.12.01.01-2.12 8.46-8.47z' />
+    <path d='M13.5 1.5l1 1' />
   </svg>
 );
 
 const MoreIcon = ({ className }: { className?: string }) => (
-  <svg className={className} width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-    <circle cx="4" cy="8" r="1.25" />
-    <circle cx="8" cy="8" r="1.25" />
-    <circle cx="12" cy="8" r="1.25" />
+  // ... (unchanged)
+  <svg className={className} width='16' height='16' viewBox='0 0 16 16' fill='currentColor'>
+    <circle cx='4' cy='8' r='1.25' />
+    <circle cx='8' cy='8' r='1.25' />
+    <circle cx='12' cy='8' r='1.25' />
   </svg>
 );
 
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+
 const DriveItemCard: React.FC<DriveItemCardProps> = ({
+  id,
   imageSrc,
   imageAlt,
   title,
@@ -69,15 +87,43 @@ const DriveItemCard: React.FC<DriveItemCardProps> = ({
   const fullStars = rating != null ? Math.min(5, Math.floor(rating)) : 0;
   const emptyStars = 5 - fullStars;
 
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: id || 'draggable-item',
+    disabled: !id,
+    data: {
+      imageSrc,
+      imageAlt,
+      title,
+      subtitle,
+      badge,
+    },
+  });
+
+  const style = isDragging
+    ? {
+        opacity: 0,
+      }
+    : transform
+      ? {
+          transform: CSS.Translate.toString(transform),
+        }
+      : undefined;
+
   return (
-    <div className={`group ${className} overflow-hidden rounded-xl bg-white shadow-xs dark:bg-gray-800`}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`group ${className} touch-none overflow-hidden rounded-xl bg-white shadow-xs dark:bg-gray-800`}
+    >
       <div className='flex h-full flex-col'>
         {/* Image */}
         <div className='relative'>
           <img className='w-full' src={imageSrc} width='286' height='160' alt={imageAlt} />
           {imageOverlay && <div className='absolute top-0 right-0 mt-4 mr-4'>{imageOverlay}</div>}
           {/* Hover: 연필 / 구분선 / 더보기 */}
-          <div className='absolute top-3 right-3 flex items-center rounded-lg bg-white/90 shadow-sm backdrop-blur-sm opacity-0 transition-opacity duration-200 group-hover:opacity-100 dark:bg-gray-800/90'>
+          <div className='absolute top-3 right-3 flex items-center rounded-lg bg-white/90 opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 dark:bg-gray-800/90'>
             <button
               type='button'
               className='flex h-8 w-8 items-center justify-center rounded-l-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100'

@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import FilterButton from '../../../components/DropdownFilter';
 import Datepicker from '../../../components/Datepicker';
 import DriveItemCard from '../../../components/DriveItemCard';
 import AppImage01 from '../../../images/applications-image-01.jpg';
+import ChildCloth from '../../../images/faddit/childcloth.png';
+import { useDrive } from '../../../context/DriveContext';
 
 const FadditDrive: React.FC = () => {
+  const { items, setItems } = useDrive();
+
+  useEffect(() => {
+    // Initialize mock data if empty
+    if (items.length === 0) {
+      const mockItems = Array.from({ length: 10 }).map((_, index) => ({
+        id: `drive-item-${index + 1}`,
+        imageSrc: ChildCloth,
+        imageAlt: 'Application 01',
+        title: `[패딧] 2025 S/S 남성 청바지_데미지 ${index + 1}`,
+        subtitle: '테스트 필드',
+        badge: '작업지시서',
+      }));
+      setItems(mockItems);
+    }
+  }, []); // Run once on mount
+
   return (
     <div className='mx-auto w-full max-w-[96rem] px-4 py-8 sm:px-6 lg:px-8'>
       {/* Home actions */}
@@ -38,14 +57,15 @@ const FadditDrive: React.FC = () => {
       <div>
         <div className='mt-8'>
           <div className='grid grid-cols-12 gap-6'>
-            {Array.from({ length: 10 }).map((_, index) => (
+            {items.map((item) => (
               <DriveItemCard
-                key={index}
-                imageSrc={AppImage01}
-                imageAlt='Application 01'
-                title={`[패딧] 2025 S/S 남성 청바지_데미지 ${index + 1}`}
-                subtitle='테스트 필드'
-                badge='작업지시서'
+                key={item.id}
+                id={item.id}
+                imageSrc={item.imageSrc}
+                imageAlt={item.imageAlt}
+                title={item.title}
+                subtitle={item.subtitle}
+                badge={item.badge}
                 actionLabel='View'
                 actionHref='#0'
               />

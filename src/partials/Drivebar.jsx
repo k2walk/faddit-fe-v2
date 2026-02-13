@@ -1,22 +1,46 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useDroppable } from '@dnd-kit/core';
+import { useDrive } from '../context/DriveContext';
 
 import SidebarLinkGroup from './SidebarLinkGroup';
-
 import LogoOnly from '../images/icons/faddit-logo-only.svg?react';
 
 //icons svg from lucide
-import { House } from 'lucide-react';
-import { Search } from 'lucide-react';
-import { MessagesSquare } from 'lucide-react';
-import { FolderClosed } from 'lucide-react';
-import { FolderOpen } from 'lucide-react';
-import { ChevronDown } from 'lucide-react';
-import { ChevronUp } from 'lucide-react';
+import {
+  House,
+  Search,
+  MessagesSquare,
+  FolderOpen,
+  FolderClosed,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
+
+// Helper component for droppable sections
+const DragDropSection = ({ id, title, children, className }) => {
+  const { setNodeRef, isOver } = useDroppable({
+    id: id,
+    data: { type: 'section', id: id },
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`${className} ${isOver ? '-mx-2 rounded-lg bg-violet-100/50 px-2 transition-colors dark:bg-violet-900/20' : ''}`}
+    >
+      <span className='lg:sidebar-expanded:block my-5 font-extrabold text-gray-400 lg:hidden 2xl:block'>
+        {title}
+      </span>
+      {children}
+    </div>
+  );
+};
 
 function Drivebar({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
   const location = useLocation();
   const { pathname } = location;
+  const { workspaces, favorites } = useDrive();
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
@@ -212,190 +236,231 @@ function Drivebar({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
                 </NavLink>
               </li>
 
-              {/* folder area */}
-              <span className='lg:sidebar-expanded:block my-5 font-extrabold text-gray-400 lg:hidden 2xl:block'>
-                워크스페이스
-              </span>
-
-              {Array.from({ length: 3 }).map((_, index) => (
-                <SidebarLinkGroup
-                  activecondition={pathname === '/' || pathname.includes('dashboard')}
-                >
-                  {(handleClick, open) => {
-                    return (
-                      <React.Fragment>
-                        <a
-                          href='#0'
-                          className={`block truncate text-gray-800 transition duration-150 dark:text-gray-100 ${
-                            pathname === '/' || pathname.includes('dashboard')
-                              ? ''
-                              : 'hover:text-gray-900 dark:hover:text-white'
-                          }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleClick();
-                            setSidebarExpanded(true);
-                          }}
-                        >
-                          <div className='flex items-center justify-between'>
-                            <div className='flex items-center'>
-                              {open ? (
-                                <FolderOpen
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-faddit dark:text-faddit'
-                                />
-                              ) : (
-                                <FolderClosed
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-gray-400 dark:text-gray-500'
-                                />
-                              )}
-                              <span className='lg:sidebar-expanded:opacity-100 ml-4 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
-                                워크 스페이스 폴더 1
-                              </span>
+              {/* Workspace Section */}
+              <DragDropSection id='section-workspace' title='워크스페이스'>
+                {workspaces.map((item) =>
+                  item.type === 'folder' ? (
+                    <SidebarLinkGroup
+                      key={item.id}
+                      id={item.id}
+                      activecondition={pathname === '/' || pathname.includes('dashboard')}
+                    >
+                      {(handleClick, open) => {
+                        return (
+                          <React.Fragment>
+                            <a
+                              href='#0'
+                              className={`block truncate text-gray-800 transition duration-150 dark:text-gray-100 ${
+                                pathname === '/' || pathname.includes('dashboard')
+                                  ? ''
+                                  : 'hover:text-gray-900 dark:hover:text-white'
+                              }`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleClick();
+                                setSidebarExpanded(true);
+                              }}
+                            >
+                              <div className='flex items-center justify-between'>
+                                <div className='flex items-center'>
+                                  {open ? (
+                                    <FolderOpen
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-faddit dark:text-faddit'
+                                    />
+                                  ) : (
+                                    <FolderClosed
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-gray-400 dark:text-gray-500'
+                                    />
+                                  )}
+                                  <span className='lg:sidebar-expanded:opacity-100 ml-4 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
+                                    {item.name}
+                                  </span>
+                                </div>
+                                <div className='ml-2 flex shrink-0'>
+                                  {open ? (
+                                    <ChevronUp
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-faddit dark:text-faddit'
+                                    />
+                                  ) : (
+                                    <ChevronDown
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-gray-400 dark:text-gray-500'
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </a>
+                            <div className='lg:sidebar-expanded:block lg:hidden 2xl:block'>
+                              <ul className={`mt-1 pl-8 ${!open && 'hidden'}`}>
+                                {item.children?.map((child) => (
+                                  <li key={child.id} className='my-1 last:mb-0'>
+                                    <NavLink
+                                      end
+                                      to='/'
+                                      className={({ isActive }) =>
+                                        'block truncate transition duration-150 ' +
+                                        (isActive
+                                          ? 'text-violet-500'
+                                          : 'text-gray-500/90 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200')
+                                      }
+                                    >
+                                      <span className='lg:sidebar-expanded:opacity-100 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
+                                        {child.name}
+                                      </span>
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
-                            {/* Icon */}
-                            <div className='ml-2 flex shrink-0'>
-                              {open ? (
-                                <ChevronUp
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-faddit dark:text-faddit'
-                                />
-                              ) : (
-                                <ChevronDown
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-gray-400 dark:text-gray-500'
-                                />
-                              )}
-                            </div>
-                          </div>
-                        </a>
-                        {/**file area */}
-                        <div className='lg:sidebar-expanded:block lg:hidden 2xl:block'>
-                          <ul className={`mt-1 pl-8 ${!open && 'hidden'}`}>
-                            <li className='my-1 last:mb-0'>
-                              <NavLink
-                                end
-                                to='/'
-                                className={({ isActive }) =>
-                                  'block truncate transition duration-150 ' +
-                                  (isActive
-                                    ? 'text-violet-500'
-                                    : 'text-gray-500/90 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200')
-                                }
-                              >
-                                <span className='lg:sidebar-expanded:opacity-100 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
-                                  작지 파일 1
-                                </span>
-                              </NavLink>
-                            </li>
-                          </ul>
+                          </React.Fragment>
+                        );
+                      }}
+                    </SidebarLinkGroup>
+                  ) : (
+                    <li
+                      key={item.id}
+                      className='mb-0.5 rounded-lg bg-linear-to-r py-2 pr-3 pl-4 last:mb-0'
+                    >
+                      <NavLink
+                        end
+                        to='/'
+                        className='block truncate text-gray-800 transition duration-150 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white'
+                      >
+                        <div className='flex items-center'>
+                          <span className='mr-2 text-gray-400'>📄</span>
+                          <span className='lg:sidebar-expanded:opacity-100 ml-1 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
+                            {item.name}
+                          </span>
                         </div>
-                      </React.Fragment>
-                    );
-                  }}
-                </SidebarLinkGroup>
-              ))}
+                      </NavLink>
+                    </li>
+                  ),
+                )}
+              </DragDropSection>
 
-              <span className='lg:sidebar-expanded:block my-5 font-extrabold text-gray-400 lg:hidden 2xl:block'>
-                즐겨찾기
-              </span>
-
-              {Array.from({ length: 3 }).map((_, index) => (
-                <SidebarLinkGroup
-                  activecondition={pathname === '/' || pathname.includes('dashboard')}
-                >
-                  {(handleClick, open) => {
-                    return (
-                      <React.Fragment>
-                        <a
-                          href='#0'
-                          className={`block truncate text-gray-800 transition duration-150 dark:text-gray-100 ${
-                            pathname === '/' || pathname.includes('dashboard')
-                              ? ''
-                              : 'hover:text-gray-900 dark:hover:text-white'
-                          }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleClick();
-                            setSidebarExpanded(true);
-                          }}
-                        >
-                          <div className='flex items-center justify-between'>
-                            <div className='flex items-center'>
-                              {open ? (
-                                <FolderOpen
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-faddit dark:text-faddit'
-                                />
-                              ) : (
-                                <FolderClosed
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-gray-400 dark:text-gray-500'
-                                />
-                              )}
-                              <span className='lg:sidebar-expanded:opacity-100 ml-4 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
-                                좋아하는 폴더 1
-                              </span>
+              {/* Favorites Section */}
+              <DragDropSection id='section-favorite' title='즐겨찾기'>
+                {favorites.map((item) =>
+                  item.type === 'folder' ? (
+                    <SidebarLinkGroup
+                      key={item.id}
+                      id={item.id}
+                      activecondition={pathname === '/' || pathname.includes('dashboard')}
+                    >
+                      {(handleClick, open) => {
+                        return (
+                          <React.Fragment>
+                            <a
+                              href='#0'
+                              className={`block truncate text-gray-800 transition duration-150 dark:text-gray-100 ${
+                                pathname === '/' || pathname.includes('dashboard')
+                                  ? ''
+                                  : 'hover:text-gray-900 dark:hover:text-white'
+                              }`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleClick();
+                                setSidebarExpanded(true);
+                              }}
+                            >
+                              <div className='flex items-center justify-between'>
+                                <div className='flex items-center'>
+                                  {open ? (
+                                    <FolderOpen
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-faddit dark:text-faddit'
+                                    />
+                                  ) : (
+                                    <FolderClosed
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-gray-400 dark:text-gray-500'
+                                    />
+                                  )}
+                                  <span className='lg:sidebar-expanded:opacity-100 ml-4 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
+                                    {item.name}
+                                  </span>
+                                </div>
+                                <div className='ml-2 flex shrink-0'>
+                                  {open ? (
+                                    <ChevronUp
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-faddit dark:text-faddit'
+                                    />
+                                  ) : (
+                                    <ChevronDown
+                                      width={16}
+                                      height={16}
+                                      strokeWidth={3}
+                                      className='text-gray-400 dark:text-gray-500'
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </a>
+                            <div className='lg:sidebar-expanded:block lg:hidden 2xl:block'>
+                              <ul className={`mt-1 pl-8 ${!open && 'hidden'}`}>
+                                {item.children?.map((child) => (
+                                  <li key={child.id} className='my-1 last:mb-0'>
+                                    <NavLink
+                                      end
+                                      to='/'
+                                      className={({ isActive }) =>
+                                        'block truncate transition duration-150 ' +
+                                        (isActive
+                                          ? 'text-violet-500'
+                                          : 'text-gray-500/90 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200')
+                                      }
+                                    >
+                                      <span className='lg:sidebar-expanded:opacity-100 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
+                                        {child.name}
+                                      </span>
+                                    </NavLink>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
-                            {/* Icon */}
-                            <div className='ml-2 flex shrink-0'>
-                              {open ? (
-                                <ChevronUp
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-faddit dark:text-faddit'
-                                />
-                              ) : (
-                                <ChevronDown
-                                  width={16}
-                                  height={16}
-                                  strokeWidth={3}
-                                  className='text-gray-400 dark:text-gray-500'
-                                />
-                              )}
-                            </div>
-                          </div>
-                        </a>
-                        {/**file area */}
-                        <div className='lg:sidebar-expanded:block lg:hidden 2xl:block'>
-                          <ul className={`mt-1 pl-8 ${!open && 'hidden'}`}>
-                            <li className='my-1 last:mb-0'>
-                              <NavLink
-                                end
-                                to='/'
-                                className={({ isActive }) =>
-                                  'block truncate transition duration-150 ' +
-                                  (isActive
-                                    ? 'text-violet-500'
-                                    : 'text-gray-500/90 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200')
-                                }
-                              >
-                                <span className='lg:sidebar-expanded:opacity-100 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
-                                  작지 파일 1
-                                </span>
-                              </NavLink>
-                            </li>
-                          </ul>
+                          </React.Fragment>
+                        );
+                      }}
+                    </SidebarLinkGroup>
+                  ) : (
+                    <li
+                      key={item.id}
+                      className='mb-0.5 rounded-lg bg-linear-to-r py-2 pr-3 pl-4 last:mb-0'
+                    >
+                      <NavLink
+                        end
+                        to='/'
+                        className='block truncate text-gray-800 transition duration-150 hover:text-gray-900 dark:text-gray-100 dark:hover:text-white'
+                      >
+                        <div className='flex items-center'>
+                          <span className='mr-2 text-gray-400'>📄</span>
+                          <span className='lg:sidebar-expanded:opacity-100 ml-1 text-sm font-medium duration-200 lg:opacity-0 2xl:opacity-100'>
+                            {item.name}
+                          </span>
                         </div>
-                      </React.Fragment>
-                    );
-                  }}
-                </SidebarLinkGroup>
-              ))}
+                      </NavLink>
+                    </li>
+                  ),
+                )}
+              </DragDropSection>
             </ul>
           </div>
         </div>
