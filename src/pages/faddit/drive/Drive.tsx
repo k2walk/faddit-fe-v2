@@ -1,10 +1,74 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 import DriveItemCard from '../../../components/DriveItemCard';
 import Toast2 from '../../../components/Toast2';
 import ChildCloth from '../../../images/faddit/childcloth.png';
 import { useDrive } from '../../../context/DriveContext';
 
 type ViewMode = 'grid' | 'list';
+
+const DriveListRow: React.FC<{
+  item: {
+    id: string;
+    title: string;
+    subtitle: string;
+    owner?: string;
+    date?: string;
+    size?: string;
+  };
+  checked: boolean;
+  onCheckChange: (checked: boolean) => void;
+}> = ({ item, checked, onCheckChange }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: item.id,
+    data: {
+      type: 'drive-item',
+      title: item.title,
+      subtitle: item.subtitle,
+    },
+  });
+
+  const style = isDragging
+    ? {
+        opacity: 0,
+      }
+    : transform
+      ? {
+          transform: CSS.Translate.toString(transform),
+        }
+      : undefined;
+
+  return (
+    <tr
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className='cursor-grab border-t border-gray-100 active:cursor-grabbing dark:border-gray-700/60'
+    >
+      <td className='w-px px-4 py-3'>
+        <label className='inline-flex' onPointerDown={(e) => e.stopPropagation()}>
+          <span className='sr-only'>Select {item.title}</span>
+          <input
+            className='form-checkbox'
+            type='checkbox'
+            checked={checked}
+            onChange={(e) => onCheckChange(e.target.checked)}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </label>
+      </td>
+      <td className='px-4 py-3'>
+        <div className='font-medium text-gray-800 dark:text-gray-100'>{item.title}</div>
+        <div className='mt-1 text-xs text-gray-500 dark:text-gray-400'>{item.subtitle}</div>
+      </td>
+      <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>{item.owner || '-'}</td>
+      <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>{item.date || '-'}</td>
+      <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>{item.size || '-'}</td>
+    </tr>
+  );
+};
 
 const FadditDrive: React.FC = () => {
   const { items, setItems } = useDrive();
@@ -24,7 +88,7 @@ const FadditDrive: React.FC = () => {
         imageAlt: 'Application 01',
         title: `[패딧] 2025 S/S 남성 청바지_데미지 ${index + 1}`,
         subtitle: '테스트 필드',
-        badge: '작업지시서',
+        badge: '테스트 뱃지1',
         owner: index % 2 === 0 ? 'Carolyn McNeail' : 'Faddit Team',
         date: `2026-02-${String((index % 9) + 1).padStart(2, '0')}`,
         size: `${(index % 5) + 1}.${index % 3} MB`,
@@ -204,36 +268,12 @@ const FadditDrive: React.FC = () => {
               </thead>
               <tbody>
                 {items.map((item) => (
-                  <tr key={item.id} className='border-t border-gray-100 dark:border-gray-700/60'>
-                    <td className='w-px px-4 py-3'>
-                      <label className='inline-flex'>
-                        <span className='sr-only'>Select {item.title}</span>
-                        <input
-                          className='form-checkbox'
-                          type='checkbox'
-                          checked={selectedSet.has(item.id)}
-                          onChange={(e) => handleSelectItem(item.id, e.target.checked)}
-                        />
-                      </label>
-                    </td>
-                    <td className='px-4 py-3'>
-                      <div className='font-medium text-gray-800 dark:text-gray-100'>
-                        {item.title}
-                      </div>
-                      <div className='mt-1 text-xs text-gray-500 dark:text-gray-400'>
-                        {item.subtitle}
-                      </div>
-                    </td>
-                    <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>
-                      {item.owner || '-'}
-                    </td>
-                    <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>
-                      {item.date || '-'}
-                    </td>
-                    <td className='px-4 py-3 text-gray-600 dark:text-gray-300'>
-                      {item.size || '-'}
-                    </td>
-                  </tr>
+                  <DriveListRow
+                    key={item.id}
+                    item={item}
+                    checked={selectedSet.has(item.id)}
+                    onCheckChange={(checked) => handleSelectItem(item.id, checked)}
+                  />
                 ))}
               </tbody>
             </table>
