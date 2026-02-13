@@ -19,8 +19,15 @@ import DriveItemCard from '../components/DriveItemCard';
 // Inner component to use the context
 const DriveLayoutContent: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { activeDragItem, setActiveDragItem, moveItemToFolder, items, setItems, addFileToSection } =
-    useDrive();
+  const {
+    activeDragItem,
+    setActiveDragItem,
+    moveItemToFolder,
+    moveSidebarItem,
+    items,
+    setItems,
+    addFileToSection,
+  } = useDrive();
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -38,6 +45,12 @@ const DriveLayoutContent: React.FC = () => {
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
+    const activeType = active.data.current?.type;
+    if (activeType !== 'drive-item') {
+      setActiveDragItem(null);
+      return;
+    }
+
     const item = items.find((i) => i.id === active.id);
     if (item) {
       setActiveDragItem(item);
@@ -55,8 +68,15 @@ const DriveLayoutContent: React.FC = () => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    const activeType = active.data.current?.type;
 
-    if (over && active.id !== over.id) {
+    if (over && active.id !== over.id && activeType === 'sidebar-item') {
+      moveSidebarItem(active.id.toString(), over.id.toString());
+      setActiveDragItem(null);
+      return;
+    }
+
+    if (over && active.id !== over.id && activeType === 'drive-item') {
       const activeItem = items.find((i) => i.id === active.id);
 
       if (over.id === 'section-workspace' && activeItem) {

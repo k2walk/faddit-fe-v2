@@ -1,11 +1,9 @@
 import React from 'react';
 
-import UserImage01 from '../images/avatar-01.jpg';
 import UserImage02 from '../images/avatar-02.jpg';
 import UserImage03 from '../images/avatar-03.jpg';
 import UserImage04 from '../images/avatar-04.jpg';
 import UserImage05 from '../images/avatar-05.jpg';
-import UserImage06 from '../images/avatar-06.jpg';
 
 export interface DriveItemCardProps {
   /** 이미지 URL */
@@ -36,6 +34,8 @@ export interface DriveItemCardProps {
   id?: string;
   /** 그리드 컬럼 클래스 (기본: col-span-full sm:col-span-6 xl:col-span-3) */
   className?: string;
+  isSelected?: boolean;
+  onSelectChange?: (id: string, checked: boolean) => void;
 }
 
 const PencilIcon = ({ className }: { className?: string }) => (
@@ -83,14 +83,16 @@ const DriveItemCard: React.FC<DriveItemCardProps> = ({
   imageOverlay,
   children,
   className = 'col-span-full sm:col-span-6 xl:col-span-3',
+  isSelected = false,
+  onSelectChange,
 }) => {
-  const fullStars = rating != null ? Math.min(5, Math.floor(rating)) : 0;
-  const emptyStars = 5 - fullStars;
+  const checkboxId = id || title;
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: id || 'draggable-item',
     disabled: !id,
     data: {
+      type: 'drive-item',
       imageSrc,
       imageAlt,
       title,
@@ -115,11 +117,36 @@ const DriveItemCard: React.FC<DriveItemCardProps> = ({
       style={style}
       {...listeners}
       {...attributes}
-      className={`group ${className} touch-none overflow-hidden rounded-xl bg-white shadow-xs dark:bg-gray-800`}
+      className={`group ${className} cursor-pointer touch-none overflow-hidden rounded-xl border bg-white shadow-xs transition-all dark:bg-gray-800 ${
+        isSelected
+          ? 'border-violet-300 shadow-lg shadow-violet-500/10 dark:border-violet-500/60'
+          : 'border-gray-200 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-500/10 dark:border-gray-700/60 dark:hover:border-violet-500/50'
+      }`}
     >
       <div className='flex h-full flex-col'>
         {/* Image */}
         <div className='relative'>
+          <label
+            className={`absolute top-3 left-3 z-10 inline-flex h-6 w-6 items-center justify-center rounded-md border border-gray-200 bg-white/95 shadow-sm transition-opacity dark:border-gray-600 dark:bg-gray-800/95 ${
+              isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+            }`}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span className='sr-only'>Select file</span>
+            <input
+              id={checkboxId}
+              className='form-checkbox'
+              type='checkbox'
+              checked={isSelected}
+              onChange={(e) => {
+                if (!id || !onSelectChange) {
+                  return;
+                }
+                onSelectChange(id, e.target.checked);
+              }}
+            />
+          </label>
           <img className='w-full' src={imageSrc} width='286' height='160' alt={imageAlt} />
           {imageOverlay && <div className='absolute top-0 right-0 mt-4 mr-4'>{imageOverlay}</div>}
           {/* Hover: 연필 / 구분선 / 더보기 */}
@@ -157,12 +184,6 @@ const DriveItemCard: React.FC<DriveItemCardProps> = ({
               <h3 className='mb-1 text-lg font-semibold text-gray-800 dark:text-gray-100'>
                 {title}
               </h3>
-              {subtitle && (
-                <div className='text-sm text-gray-600 dark:text-gray-400'>{subtitle}</div>
-              )}
-              {subtitle && (
-                <div className='text-sm text-gray-600 dark:text-gray-400'>{subtitle}</div>
-              )}
               {subtitle && (
                 <div className='text-sm text-gray-600 dark:text-gray-400'>{subtitle}</div>
               )}
