@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import WorksheetTopBar from './WorksheetTopBar';
 import WorksheetLeftSidebar from './WorksheetLeftSidebar';
-import WorksheetToolbar from './WorksheetToolbar';
-import WorksheetCanvasSection from './WorksheetCanvasSection';
+import WorksheetToolbox from './WorksheetToolbox';
+import WorksheetContentPanel from './WorksheetContentPanel';
+import { CanvasProvider } from './CanvasProvider';
 
 const Worksheet: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -17,10 +18,12 @@ const Worksheet: React.FC = () => {
       />
       <div className='flex min-h-0 min-w-0 flex-1 gap-2'>
         <WorksheetLeftSidebar open={sidebarOpen} />
-        <WorksheetToolbar />
-        <main className='flex min-h-0 min-w-0 flex-1'>
-          <WorksheetCanvasSection />
-        </main>
+        <CanvasProvider>
+          <WorksheetToolbox />
+          <main className='flex min-h-0 min-w-0 flex-1'>
+            <WorksheetContentPanel />
+          </main>
+        </CanvasProvider>
       </div>
     </div>
   );
