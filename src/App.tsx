@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Navigate, Routes, Route, useLocation } from 'react-router-dom';
 
 import './css/style.css';
 
@@ -75,7 +75,7 @@ import FadditSignup from './pages/faddit/auth/Signup';
 import FadditResetPassword from './pages/faddit/auth/ResetPassword';
 import FadditMain from './pages/faddit/Main';
 import FadditHome from './pages/faddit/Home';
-import Worksheet from './pages/faddit/worksheet/Worksheet';
+import WorksheetRoute from './pages/faddit/worksheet/WorksheetRoute';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 
@@ -174,7 +174,11 @@ function App() {
           <Route path='/faddit/reset-password' element={<FadditResetPassword />} />
           <Route path='/sign/reset-password' element={<FadditResetPassword />} />
         </Route>
-        <Route path='/faddit/worksheet/:worksheetId?' element={<Worksheet />} />
+        <Route
+          path='/faddit/worksheet/editmode'
+          element={<Navigate replace to='/faddit/worksheet?viewmode=edit' />}
+        />
+        <Route path='/faddit/worksheet/:worksheetId?' element={<WorksheetRoute />} />
         <Route element={<MainLayout />}>
           <Route path='/faddit/home' element={<FadditHome />} />
           <Route path='/faddit/main' element={<FadditMain />} />

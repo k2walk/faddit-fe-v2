@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronDown, Redo2, Undo2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ToggleButton from '../../../components/atoms/ToggleButton';
 
 const ICON_BUTTON_CLASS =
@@ -8,9 +9,14 @@ const ICON_BUTTON_CLASS =
 interface WorksheetTopBarProps {
   sidebarOpen: boolean;
   onToggleSidebar: () => void;
+  isEditMode?: boolean;
 }
 
-export default function WorksheetTopBar({ sidebarOpen, onToggleSidebar }: WorksheetTopBarProps) {
+export default function WorksheetTopBar({
+  sidebarOpen,
+  onToggleSidebar,
+  isEditMode = false,
+}: WorksheetTopBarProps) {
   return (
     <header className='flex h-14 items-center justify-between rounded-md bg-white p-2'>
       <div className='flex h-full gap-x-3'>
@@ -24,13 +30,13 @@ export default function WorksheetTopBar({ sidebarOpen, onToggleSidebar }: Worksh
         </button>
       </div>
       <div className='flex h-full gap-x-3'>
-        <button
-          type='button'
+        <Link
+          to={isEditMode ? '/faddit/worksheet' : '/faddit/worksheet?viewmode=edit'}
           className='flex h-full cursor-pointer items-center justify-center gap-x-1 rounded-lg bg-[#f9f9f9] px-4 py-2 text-sm font-medium text-gray-700 transition-all duration-300 hover:text-gray-900'
         >
-          화면 편집
+          {isEditMode ? '레이아웃 보기' : '편집 모드로 보기'}
           <ChevronDown size={16} />
-        </button>
+        </Link>
         <button
           type='button'
           className='flex h-full cursor-pointer items-center justify-center rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-gray-600'
