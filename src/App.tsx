@@ -72,10 +72,19 @@ import IconsPage from './pages/component/IconsPage';
 // Faddit Pages
 import Login from './pages/faddit/auth/Login';
 import FadditSignup from './pages/faddit/auth/Signup';
+import FadditResetPassword from './pages/faddit/auth/ResetPassword';
 import FadditMain from './pages/faddit/Main';
 import FadditHome from './pages/faddit/Home';
+import Worksheet from './pages/faddit/worksheet/Worksheet';
+import WorksheetV2 from './pages/faddit/worksheet-v2/WorksheetV2';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
+
+// Faddit Drive Pages From Jin
+import FadditDrive from './pages/faddit/drive/Drive';
+import DeletedDrive from './pages/faddit/drive/DeletedDrive';
+import DriveLayout from './layouts/DriveLayout';
+import { bootstrapAuthSession } from './lib/api/authApi';
 
 function App() {
   const location = useLocation();
@@ -85,6 +94,10 @@ function App() {
     window.scroll({ top: 0 });
     document.querySelector('html').style.scrollBehavior = '';
   }, [location.pathname]); // triggered on route change
+
+  useEffect(() => {
+    void bootstrapAuthSession();
+  }, []);
 
   return (
     <>
@@ -160,10 +173,23 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path='/faddit/sign/in' element={<Login />} />
           <Route path='/faddit/sign/up' element={<FadditSignup />} />
+          <Route path='/faddit/reset-password' element={<FadditResetPassword />} />
+          <Route path='/sign/reset-password' element={<FadditResetPassword />} />
         </Route>
+        <Route path='/faddit/worksheet' element={<WorksheetV2 />} />
+        <Route path='/faddit/worksheet/:worksheetId' element={<WorksheetV2 />} />
+        <Route path='/faddit/worksheet-v2' element={<WorksheetV2 />} />
+        <Route path='/faddit/worksheet-v2/:worksheetId' element={<WorksheetV2 />} />
+        <Route path='/faddit/worksheet/edit/:worksheetId?' element={<Worksheet />} />
         <Route element={<MainLayout />}>
           <Route path='/faddit/home' element={<FadditHome />} />
           <Route path='/faddit/main' element={<FadditMain />} />
+        </Route>
+
+        <Route element={<DriveLayout />}>
+          <Route path='/faddit/drive' element={<FadditDrive />} />
+          <Route path='/faddit/drive/:folderId' element={<FadditDrive />} />
+          <Route path='/faddit/deleted' element={<DeletedDrive />} />
         </Route>
 
         <Route path='*' element={<PageNotFound />} />
